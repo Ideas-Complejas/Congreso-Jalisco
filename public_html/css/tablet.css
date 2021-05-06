@@ -1,0 +1,157 @@
+/* Generales  */
+.container-seccion {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+
+/* Nav-bar */
+.fixed-navbar-light {
+    background-color: transparent;
+}
+.fixed-navbar-light.scrolled {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    margin-top: -130px;
+    background-color: white !important;
+    -webkit-box-shadow: 0 0 10px 0 rgb(0 0 0 / 10%);
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 10%);
+    padding: 0 15px;
+}
+.fixed-navbar-light.scrolled.awake {
+    margin-top: 0px;
+    -webkit-transition: .3s all ease-out;
+    -o-transition: .3s all ease-out;
+    transition: .3s all ease-out;
+}
+.fixed-navbar-light.scrolled .nav-link.active {
+    color: var(--purple-primary);
+}
+.fixed-navbar-light.scrolled .navbar-nav .nav-link {
+    color: var(--black) !important;
+}
+.navbar-nav .nav-link {
+    color: var(--white) !important;
+}
+
+
+/* header  */
+.header-text-content .title--header {
+    font-size: 4.4rem;
+    line-height: 4.6rem;
+}
+.header-text-content .text-header-content a, .text-header-content p{
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.8rem;
+    text-decoration: none;
+    color: var(--off-white);
+}
+
+
+/* Que es congreso */
+.congreso--container {
+    padding-top: 70px;
+}
+
+
+/* Iniciativas  */
+.container--iniciativas,
+.container--canal-parlamento {
+    margin-top: 60px;
+}
+
+.container-comision-autor {
+    display: inline-block;
+}
+.container-comision-autor {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.comentarios-list--container {
+    margin-top: 1px;
+    text-align: center;
+    vertical-align: top;
+}
+.fecha-list-iniciativa--container {
+    text-align: center;
+}
+
+
+/* /////////////////////////////////////////////
+/////////////////// Page Iniciativas //////////  */
+
+.container--search-bar {
+    padding-left: 60px;
+    padding-right: 60px;
+}
+.container-table--iniciativas {
+    margin-top: 70px;
+    margin-bottom: 60px;
+}
+.border-left {
+    height: 215px;
+    border-left: 1px solid #707070;
+    display: inline-block;
+    position: absolute;
+    vertical-align: top;
+    left: 0;
+    top: 0;
+}
+
+/* /////////////////////////////////////////////
+/////////////////// Page Detalle Iniciativas //////////  */
+.container-card-detalle-iniciativa {
+    width: 85%;
+    margin-left: 40px;
+}
+.content--comentarios-detalle-iniciativa {
+    display: flex;
+    justify-content: space-between;
+}
+.container--comentar-detalle-iniciativa {
+    width: 70%;
+}
+
+
+/* /////////////////////////////////////////////////////
+/////////////////// Page Congreso ////////////////////// */
+.card-terminologia--content {
+    min-height: 378px;
+}
+
+
+
+/* /////////////////////////////////////////////////////
+/////////////////// Page Diputados ////////////////////// */
+
+.container-cards-diputados {
+    padding: 10px 50px;
+}
+.img-cards-diputados {
+    height: 100%;
+    border-radius: 10px 0 0 10px;
+}
+
+
+
+
+/* /////////////////////////////////////////////////////
+/////////////////// Page Perfil Diputados ////////////////////// */
+.content-datos-diputado {
+    display: flex;
+}
+.img-perfil-diputado {
+    width: 90%;
+}
+.link-cv {
+    margin-left: 80px;
+}
+.redes-diputado {
+    margin-left: 80px;
+    margin-top: 0;
+}
