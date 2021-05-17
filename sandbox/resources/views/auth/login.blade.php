@@ -57,7 +57,7 @@
 				</div>
 			</div>
 			<div class="col-sm-6 px-0 d-none d-sm-block">
-				<div style="background-image: url('css/assets/images/jalisco-hemiciclo.jpg');background-size: cover;background-repeat: no-repeat;background-position: center center;height: 100%"></div>
+				<div style="background-image: url('{{asset('css/assets/images/jalisco-hemiciclo.jpg')}}');background-size: cover;background-repeat: no-repeat;background-position: center center;height: 100%"></div>
 			</div>
 		</div>
 	</div>

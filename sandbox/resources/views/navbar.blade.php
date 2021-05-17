@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg fixed-top fixed-navbar-light">
 	<div class="container">
-	<a class="navbar-brand mb-1" href="#">
+	<a class="navbar-brand mb-1" href="{{ url('/') }}">
 		<img src="{{asset('img/logo.png')}}" alt="" style="width: 60px;">
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,10 +18,10 @@
 				<a class="nav-link" href="{{ route('congreso') }}">Congreso</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link"href="{{ route('diputados') }}">Diputados</a>
+				<a class="nav-link" href="{{ route('diputados') }}">Diputados</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">Datos abiertos</a>
+				<a class="nav-link" href="{{ url('/datos') }}">Datos abiertos</a>
 			</li>
 			@guest
 			@else

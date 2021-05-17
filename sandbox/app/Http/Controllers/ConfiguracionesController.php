@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Terminologia;
 use App\Models\Video;
 use App\Models\Iniciativa;
+use App\Models\DatosAbiertos;
 use App\Models\IniciativaComentario;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -791,6 +792,283 @@ class ConfiguracionesController extends Controller
 		return response()->json($response,200);
 	}
 
+
+	/*************************************DATOS ABIERTOS**********************************/
+	//Función que crea un dato
+	public function store_dato(Request $request){
+		if(Auth::user()->hasRole("Administrador") == true){ //si es administrador puede realizar lo siguiente
+			DB::beginTransaction();
+			try {
+				
+				$data = array("titulo" => $request["titulo"],
+					"descripcion" => $request["descripcion"],
+					"link" => $request["link"],
+					"categoria" => $request["categoria"],
+
+				);
+				$niceNames = array(
+					'descripcion' => 'Descripción',
+					'titulo' => 'Título',
+					
+				);
+				$validator =  Validator::make(array_map('trim',$data), [
+					'descripcion' => ['required', 'string', 'min:2'],
+					'titulo' => ['required', 'string', 'min:2', 'unique:datos_abiertos'],
+					'categoria' => ['required', 'string', 'min:2'],
+				]);
+				$validator->setAttributeNames($niceNames); 
+				 //Si hay errores, retorna
+				if($validator->fails()){
+					$response = array("status"=>"422", "msg" => $validator->messages());
+				}else{
+
+					$file =$request->file('file');
+				
+					$url_imagen = "" ;
+					if($file){
+						
+					   
+						/*Procedimiento para guardar la nueva imagen*/
+						$folder = "datos_abiertos";
+
+						$name =  $request->file('file')->getClientOriginalName();
+						$name = "Imagen datos_abiertos";
+						$extension = $request->file('file')->getClientOriginalExtension();
+						$filename = $name." ".date('Y-m-d His').".".$extension;
+
+						if($_FILES['file']['tmp_name'] != NULL){
+							$mimetype = mime_content_type($_FILES['file']['tmp_name']);
+
+
+							if(in_array($mimetype, array("image/jpeg","image/png", "image/svg+xml"))) {
+								$file = $_FILES['file'];
+								$size = $file["size"];
+
+								if($size > "3145728"){ //3MB
+									$response["status"] = "422";
+									$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+									
+
+								}else{
+									
+									$request->file('file')->move(public_path($folder), $filename);
+									$url_imagen = "/".$folder."/".$filename;
+									
+
+								}
+								
+
+							} else {
+								$response["status"] = "422";
+								$response["msg"]= array("El formato del archivo es incorrecto, solo se permiten los siguientes formatos: .jpe .jpeg .jpg, .png, .svg");
+								
+							}
+						}
+						else{
+							$response["status"] = "422";
+							$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+							
+						}
+					}
+
+					$response = DatosAbiertos::create([
+						'titulo' => $data['titulo'],
+						'descripcion' => $data['descripcion'],
+						'url_imagen'=> $url_imagen,
+						'link'=>$data["link"],
+						"categoria" => $request["categoria"],
+						
+					]);
+					$id_dato = $response->id;
+					
+					$response["status"] = "200";
+					
+				}
+				DB::commit();
+			}catch (\Illuminate\Database\QueryException $e) {
+				DB::rollback();
+				$response = array("status"=>"422", "msg" => ["Ocurrió un error en la base de datos, intenta más tarde. "], "error"=>$e);
+			}
+			
+			return response()->json($response,200);
+		}else{
+			abort(403, 'Acción no autorizada.');
+			return redirect('/');
+		}
+	}
+
+	//Función que actualiza los datos de un dato
+	public function update_dato(Request $request, $id){
+		if(Auth::user()->hasRole("Administrador") == true){ //si es administrador puede realizar lo siguiente
+			DB::beginTransaction();
+			try {
+				$data = array("titulo" => $request["titulo"],
+					"descripcion" => $request["descripcion"],
+					"link" => $request["link"],
+					"categoria" => $request["categoria"],
+				);
+				$dato = DatosAbiertos::find($id);
+				$niceNames = array(
+					'descripcion' => 'Descripción',
+					'titulo' => 'Título',
+				);
+				$validator =  Validator::make(array_map('trim',$data), [
+					'titulo' => ['required', 'string', 'min:2',Rule::unique('datos_abiertos')->ignore($dato->id)],
+					'descripcion' => ['required', 'string', 'min:2'],
+					'categoria' => ['required', 'string', 'min:2'],
+					
+				]);
+				$validator->setAttributeNames($niceNames);
+				 //Si hay errores, retorna
+				if($validator->fails()){
+					$response = array("status"=> "422", "msg" => $validator->messages());
+				}else{
+					$file =$request->file('file');
+				
+					$url_imagen = (isset($dato)) ? $dato->url_imagen : "" ;
+					if($file){
+						
+						$image_path = public_path()."/".$url_imagen;
+
+						//En caso de que la iniciativa tenga una imagen anterior y se sube una nueva, la imagen anterior se elimina
+						if($url_imagen != "" && $url_imagen != null){
+							if(File::exists($image_path)){
+								unlink($image_path);
+							}
+						}
+					   
+						/*Procedimiento para guardar la nueva imagen*/
+						$folder = "datos_abiertos";
+
+						$name =  $request->file('file')->getClientOriginalName();
+						$name = "Imagen datos_abiertos";
+						$extension = $request->file('file')->getClientOriginalExtension();
+						$filename = $name." ".date('Y-m-d His').".".$extension;
+
+						if($_FILES['file']['tmp_name'] != NULL){
+							$mimetype = mime_content_type($_FILES['file']['tmp_name']);
+
+
+							if(in_array($mimetype, array("image/jpeg","image/png", "image/svg+xml"))) {
+								$file = $_FILES['file'];
+								$size = $file["size"];
+
+								if($size > "3145728"){ //3MB
+									$response["status"] = "422";
+									$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+									
+
+								}else{
+									
+									$request->file('file')->move(public_path($folder), $filename);
+									$url_imagen = "/".$folder."/".$filename;
+									
+
+								}
+								
+
+							} else {
+								$response["status"] = "422";
+								$response["msg"]= array("El formato del archivo es incorrecto, solo se permiten los siguientes formatos: .jpe .jpeg .jpg, .png, .svg");
+								
+							}
+						}
+						else{
+							$response["status"] = "422";
+							$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+							
+						}
+					}
+					$response["resp"] = DatosAbiertos::find($id)->update([
+						'titulo' => $data['titulo'],
+						'url_imagen'=>$url_imagen,
+						'link'=>$data['link'],
+						'descripcion' => $data['descripcion'],
+						"categoria" => $request["categoria"],
+						
+					]); 
+					 
+					$response["status"] = "200";
+					
+				}
+				DB::commit();
+				
+			}
+			catch (\Illuminate\Database\QueryException $e) {
+				DB::rollback();
+				$response = array("status"=>"422", "msg" => ["Ocurrió un error en la base de datos, intenta más tarde. "], "error"=>$e);
+			}
+			return response()->json($response,200);
+		}else{
+			abort(403, 'Acción no autorizada.');
+			return redirect('/');
+		}
+		
+		
+	}
+
+	//Función que elimina un dato
+	public function destroy_dato($id){   
+		if(Auth::user()->hasRole("Administrador") == true){ //si es administrador puede realizar lo siguiente
+			DB::beginTransaction();
+			try {
+				$dato = DatosAbiertos::where("id", $id)->first();
+				$url_imagen = (isset($dato)) ? $dato->url_imagen : "" ;
+				$image_path = public_path()."/".$url_imagen;
+				//En caso de que tenga una imagen, se elimina
+				if($url_imagen != null && $url_imagen != ""){
+					if(File::exists($image_path)){
+						unlink($image_path);
+					}
+				}
+
+				$dato = DatosAbiertos::find($id);
+				$response["resp"] = DatosAbiertos::find($id)->delete();
+				$response["status"] = 200;
+				
+				DB::commit();
+			}
+			catch (\Illuminate\Database\QueryException $e) {
+				DB::rollback();
+				if($e->errorInfo[0] == "23000"){
+					$response = array("status"=>"422", "msg" => ["Este elemento no puede ser eliminado porque está relacionado con otras tablas"], "error"=>$e);
+				}else{
+					$response = array("status"=>"422", "msg" => ["Ocurrió un error en la base de datos, intenta más tarde. "], "error"=>$e);
+				}
+			}
+			
+			return response()->json($response,200);
+		}else{
+			abort(403, 'Acción no autorizada.');
+			return redirect('/');
+		}
+	}
+
+	//Obtiene todas las datos
+	public function get_datos(){
+		if(Auth::user()->hasRole("Administrador") == true){ //si es administrador puede realizar lo siguiente
+			DB::statement(DB::raw('set @rownum=0'));
+			$datos = DB::table('datos_abiertos')
+			->select(DB::raw('(@rownum:=@rownum+1) AS RowNumY'), 'datos_abiertos.*')
+			->orderBy("datos_abiertos.titulo", "asc")
+			->get();
+			return response()->json($datos);  
+		}else{
+			abort(403, 'Acción no autorizada.');
+			return redirect('/');
+		}
+	}
+
+	//Obtiene una dato en específico
+	public function show_dato($id){
+		if(Auth::user()->hasRole("Administrador") == true){ //si es administrador puede realizar lo siguiente
+			$dato = DatosAbiertos::find($id);
+			return response()->json($dato);
+		}else{
+			abort(403, 'Acción no autorizada.');
+			return redirect('/');
+		}
+	}
 
 	
 }

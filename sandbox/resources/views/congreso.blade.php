@@ -19,7 +19,7 @@
 		<h3 class="title--infografia">EL PROCESO LEGISLATIVO</h3>
 		<div class="row justify-content-end">
 			<div class="col-md-6 col-lg-2 infografia-img--container">
-				<img class="img-1" src="img/paso1.png" alt="">
+				<img class="img-1" src="{{asset('img/paso1.png')}}" alt="">
 				<div class="circle-infografia circle-1" data-aos="flip-right">
 					<span class="icon-infografia icon-presentacion"></span>
 				</div>
@@ -60,7 +60,7 @@
 				</div>
 			</div>
 			<div class="col-md-6 col-lg-2 infografia-img--container">
-				<img class="img-2" src="img/paso2.png" alt="">
+				<img class="img-2" src="{{asset('img/paso2.png')}}" alt="">
 				<div class="circle-infografia circle-2" data-aos="flip-left">
 					<span class="icon-infografia icon-discusion"></span>
 				</div>
@@ -68,7 +68,7 @@
 		</div>
 		<div class="row justify-content-end">
 			<div class="col-md-6 col-lg-2 infografia-img--container">
-				<img class="img-3" src="img/paso3.png" alt="">
+				<img class="img-3" src="{{asset('img/paso3.png')}}" alt="">
 				<div class="circle-infografia circle-3" data-aos="flip-right">
 					<span class="icon-infografia icon-aprobacion"></span>
 				</div>
@@ -103,7 +103,7 @@
 				</div>
 			</div>
 			<div class="col-md-6 col-lg-2 infografia-img--container">
-				<img class="img-4" src="img/paso4.png" alt="">
+				<img class="img-4" src="{{asset('img/paso4.png')}}" alt="">
 				<div class="circle-infografia circle-4" data-aos="flip-left">
 					<span class="icon-infografia icon-sancion"></span>
 				</div>
@@ -111,7 +111,7 @@
 		</div>
 		<div class="row justify-content-end">
 			<div class="col-md-6 col-lg-2 infografia-img--container">
-				<img class="img-5" src="img/paso5.png" alt="">
+				<img class="img-5" src="{{asset('img/paso5.png')}}" alt="">
 				<div class="circle-infografia circle-5" data-aos="flip-right">
 					<span class="icon-infografia icon-promulgacion"></span>
 				</div>
@@ -136,7 +136,7 @@
 				</div>
 			</div>
 			<div class="col-md-6 col-lg-2 infografia-img--container">
-				<img class="img-6" src="img/paso6.png" alt="">
+				<img class="img-6" src="{{asset('img/paso6.png')}}" alt="">
 				<div class="circle-infografia circle-6" data-aos="flip-left">
 					<span class="icon-infografia icon-vigencia"></span>
 				</div>

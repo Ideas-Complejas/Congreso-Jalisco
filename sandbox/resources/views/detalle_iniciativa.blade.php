@@ -17,10 +17,11 @@
 	<div class="row mt-5">
 		<div class="col-lg-8 col-md-6">
 			<div>
-				<h5 class="title-card--iniciativa"><?php $nombre_iniciativa = ($iniciativa->nombre_iniciativa != null && $iniciativa->nombre_iniciativa != "") ? $iniciativa->nombre_iniciativa : "Nombre Iniciativa"; echo $nombre_iniciativa;?> </h5>
+				<h5 class="title-card--iniciativa"><?php $nombre_iniciativa = ($iniciativa->nombre_iniciativa != null && $iniciativa->nombre_iniciativa != "") ? $iniciativa->nombre_iniciativa : "Iniciativa"; echo $nombre_iniciativa;?> </h5>
 				<p class="text-card--iniciativa text-justify">{{$iniciativa->resumen}}
 				</p>
-				<p class="fecha--iniciativa"><i class="far fa-calendar-alt"></i> <?php echo date_format(new DateTime($iniciativa->fecha_inicial),"M d, Y"); ?></p></p>
+				<p class="fecha--iniciativa"><i class="far fa-calendar-alt"></i> <?php setlocale(LC_TIME, "spanish");
+					echo strftime("%B %d, %Y",strtotime($value->fecha_final));?></p></p>
 			</div>
 			<div class="container-comision-autor">
 				<div>
@@ -79,6 +80,8 @@
 
 			<!-- Form enviar comentario  -->
 			<?php 
+			
+			
 			$num_comentarios = 0;
 			$fecha_inicial = "";
 			$fecha_final = "";

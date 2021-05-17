@@ -293,6 +293,66 @@
 		</form>
 	</div>
 </div>
+<div class="modal fade" id="action_dato" tabindex="-1" datoe="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog " datoe="document">
+		<form id="form_dato" autocomplete="off" autocomplete="nope">
+			{{ csrf_field() }}
+			<div class="modal-content">
+				<div class="modal-header ">
+					<h5 class="modal-title" id="exampleModalLabel"><span id="title_modal_dato">Agregar nueva terminología</span><span id="ide_dato"></span></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="col-md-12">
+
+						<div class="form-group">
+							<label for="inputAddress">Título</label>
+							<input type="text" class="form-control validation" id="titulo_dato" name="titulo" placeholder="">
+						</div>
+						<div class="form-group">
+							<label">Categoría</label>
+							<select class="form-control input-materialize" name="categoria" id="categoria_dato">
+								<?php foreach ($categorias_datos as $key => $value) {
+									echo '<option value="'.$value["nombre"].'">'.$value["nombre"].'</option>';
+								}?>
+								
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label for="inputAddress">Descripción</label>
+							<textarea type="text" class="form-control validation" id="descripcion_dato" name="descripcion" placeholder=""></textarea>
+						</div>
+						<div class="form-group">
+							<label for="inputAddress">Imagen</label>
+							<a class="text-decoration-none" data-toggle="collapse" href="#ver_imagen_actual_dato" role="button" aria-expanded="false"><span class="p-1 pt-2 pb-2" id="texto_ver_imagen_actual_dato"></span>
+
+							</a>
+							<div class="collapse" id="ver_imagen_actual_dato">
+							</div>
+							<input type="file" class="form-control validation" id="url_imagen_dato" name="file" accept="image/*" placeholder="">
+						</div>
+						
+						<div class="form-group">
+							<label for="inputAddress">Link</label>
+							<input type="text" class="form-control validation" id="link_dato" name="link" placeholder="">
+						</div>
+					</div>
+					
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-dark-modal " data-dismiss="modal">CANCELAR</button>
+					<button type="button" ide="" nme="" id="create_dato" class="btn btn-principal-modal">CREAR</button>
+					<button type="button" ide="" nme="" id="save_dato" class="btn btn-principal-modal">GUARDAR</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
 <div class="" style="height: 100px; background:var(--purple-primary);">
 	
 </div>
@@ -482,6 +542,45 @@
 							</tr>
 						</thead>
 						<tbody class="list-modulo-terminologias">  
+						</tbody>
+					</table>
+
+					</div>
+				</div>
+			</div>
+			
+
+		</div>
+		<div class="row p-5">
+			<div class="col-md-12">
+				<div class="card card-sombra">
+					<div class="card-header content-card-header">
+						<div class="title-card-header">
+						   <h5>Datos abiertos</h5>
+						</div>
+						<div class="button-card-header">
+						   <button id="new_dato" type="button" class="btn btn-purple float-right"><i class="fa fa-plus mr-1"></i> Nuevo dato</button>   
+						</div>
+						 <small>Aquí podrás añadir, editar o eliminar un dato. Dichos datos son los que aparecen en la sección de Datos Abiertos</small>
+						
+					</div>
+					<div class="card-body">
+
+						<table id="table_datos" class="table dataTable table-striped" style="width:100%; height: 20rem">
+						<thead>
+							<tr>
+								<th scope="col"></th>
+								<th scope="col" class="">Título</th>
+								<th scope="col" class="">Categoría</th>
+								<th scope="col">Descripción</th>
+								<th scope="col">Imagen</th>
+								<th scope="col">Link</th>
+								<th scope="col" class="centrar">Acciones</th>
+								
+
+							</tr>
+						</thead>
+						<tbody class="list-modulo-datos">  
 						</tbody>
 					</table>
 
@@ -832,6 +931,7 @@
 			
 		});
 
+		//TERMINOLOGÍAS
 		var oTable = $('#table_terminologias').DataTable(); 
 		oTable.destroy();
 
@@ -1821,7 +1921,317 @@
 			  userCollapseText: '[Cerrar]' // por defecto es 'read less...'
 			});
 		})
-		 
+		
+
+		//DATOS
+		var oTable = $('#table_datos').DataTable(); 
+		oTable.destroy();
+
+		var table_datos = $('#table_datos').dataTable({
+
+			"ajax": {
+				"url": SITEURL +"/configuraciones/get_datos",
+				"dataSrc": "",
+				data:{
+					"_token": "{{ csrf_token() }}",
+				}
+			},
+			"columns": 
+			[
+			{
+				"className": '',
+				"visible": false,
+				"data": null,
+				render:function(data, type, row)
+				{
+					return data["RowNumY"];
+					
+					
+				},
+			},
+			
+			
+
+			{ data: "titulo" },
+			{ data: "categoria" },
+			{
+				"className": 'details-control text-justify',
+				"orderable": false,
+				"data": null,
+				render:function(data, type, row)
+				{
+					
+					
+					return data["descripcion"];
+				},
+			},
+			
+			{
+				"className": 'details-control text-justify',
+				"orderable": false,
+				"data": null,
+				render:function(data, type, row)
+				{
+					
+					
+					return data["url_imagen"];
+				},
+			},
+			{
+				"className": 'details-control text-justify',
+				"orderable": false,
+				"data": null,
+				render:function(data, type, row)
+				{
+					
+					
+					return data["link"];
+				},
+			},
+			
+			{
+				"className": 'details-control text-center',
+				"orderable": false,
+				"data": null,
+				render:function(data, type, row)
+				{
+					var col = "";
+						col = col+ "<button type='button' class='btn btn-light-blue edit_dato' nme='"+data["titulo"]+"' ide='"+data["id"]+"' ><i class='fa fa-edit'></i></button>";
+						col = col+ "<button type='button' class='btn btn-light-red delete_dato' nme='"+data["titulo"]+"' ide='"+data["id"]+"' ><i class='far fa-trash-alt'></i></button>";
+					
+					return col;
+				},
+			},
+
+			], 
+
+				
+			"language": {
+				"url": SITEURL +'/DataTables/DataTableSpanish.json',
+			},
+			paging: true,
+			searching: true,
+			select: true,
+			"scrollX": true,
+			"processing" : true,
+
+			
+			
+		});
+
+		$('#action_dato').off('hidden.bs.modal');
+		$("#action_dato").on('hidden.bs.modal', function () {
+			$(this).find(".text-error").text("");
+			$(this).find(".check-ok").removeClass("check-ok");
+			$(this).find(".validation").val("");
+			$("#ver_imagen_actual_dato").html("");
+			$("#texto_ver_imagen_actual_dato").html("");
+		});
+		/*  función para eliminar un dato*/
+		$('body').off('click',".delete_dato");
+		$('body').on('click', '.delete_dato', function () {
+			var id_dato = $(this).attr("ide");
+			var nme = $(this).attr("nme");
+			bootbox.confirm({
+				message : "<p class='text-center'><i class='fa fa-exclamation-triangle icon-warning'></i>&nbsp¿Está seguro que desea eliminar este dato: <b>"+nme+"</b>?</p>",
+				buttons: {
+					confirm: {
+						label: 'CONTINUAR',
+						className: 'btn-principal-modal'
+					},
+					cancel: {
+						label: 'CANCELAR',
+						className: 'btn-outline-dark-modal'
+					}
+				},
+				callback: function (result) {
+					if(result == true){
+						$("#preloader").css("display", "block");
+						$.ajax({
+							type: "get",
+							url: SITEURL + "/configuraciones/delete_dato/"+id_dato,
+							success: function (data) {
+								if(data.status == "200"){
+									var oTable = $('#table_datos').DataTable(); 
+									oTable.ajax.reload();
+									bootbox.alert("¡Dato eliminado con éxito!");
+								}
+								else if (data.status == "422"){
+									var error = data.msg;
+									var mensaje = "";
+									for (var i in error) {
+										var error_msg = error[i];
+										mensaje = mensaje + error_msg+"<br>";
+									}
+									bootbox.alert(mensaje);
+								}else{
+									bootbox.alert("¡Error al eliminar el dato!");
+								}
+							},
+							error: function (data) {
+								console.log('Error:', data);
+								bootbox.alert("¡Error al eliminar el dato!");
+							},
+							complete: function(){
+								setTimeout(function() {
+									$("#preloader").fadeOut(500);
+								},200);
+							}
+						});
+					}
+				}
+			}); 
+		});
+		/*función para lanzar modal para editar un dato*/
+		$('body').off('click', ".edit_dato");
+		$('body').on('click', '.edit_dato', function () {
+			$("#preloader").css("display", "block");
+			var nme = $(this).attr("nme");
+			var id_dato = $(this).attr("ide");
+			$("#save_dato").attr("ide", id_dato);
+			$("#title_modal_dato").html("Actualizar dato: <b>"+nme+"</b>");
+			$("#create_dato").css("display", "none");
+			$("#save_dato").css("display", "block");
+			$.ajax({
+				type: "get",
+				url: SITEURL + "/configuraciones/get_dato/"+id_dato,
+				data:{},
+				success: function (data) {
+					$("#titulo_dato").val(data["titulo"]);
+					$("#descripcion_dato").val(data["descripcion"]);
+					if(data["url_imagen"] != "" && data["url_imagen"] != null){
+						var url = "{{asset('')}}"+data["url_imagen"];
+						$("#ver_imagen_actual_dato").append("<img width='95%' src='"+url+"'>");
+						$("#texto_ver_imagen_actual_dato").append("Ver imagen actual");
+						
+					}
+					$("#categoria_dato").val(data["categoria"]).trigger("change");
+					$("#link_dato").val(data["link"]);
+
+					$("#action_dato").modal();
+					
+					
+				},
+				error: function (data) {
+					console.log('Error:', data);
+					bootbox.alert("¡Error al obtener la información del dato!");
+				},
+				complete: function(){
+					setTimeout(function() {
+						$("#preloader").fadeOut(500);
+					},200);
+				}
+			});
+		});
+		/*función para editar un dato*/ 
+		$('body').off('click',"#save_dato");
+		$('body').on('click', '#save_dato', function () {
+			$("#preloader").css("display", "block");
+			var id_dato = $("#save_dato").attr("ide");
+			var nombre_dato = $("#nombre_dato").val();
+
+			var form = $("#form_dato")[0];
+			var formulario = new FormData(form);
+			
+			$.ajax({
+				type: "post",
+				url: SITEURL + "/configuraciones/update_dato/"+id_dato,
+				data:formulario,
+				enctype: 'multipart/form-data',
+				cache: false,
+				contentType: false,
+				processData: false,
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				success: function (data) {
+					if(data.status == "200"){
+						$("#action_dato").modal("hide");
+						$('.modal-backdrop').remove();
+						bootbox.alert("¡Dato actualizado con éxito!");
+						var oTable = $('#table_datos').DataTable(); 
+						oTable.ajax.reload();
+					}else if (data.status == "422"){
+						var error = data.msg;
+						var mensaje = "";
+						for (var i in error) {
+							var error_msg = error[i];
+							mensaje = mensaje + error_msg+"<br>";
+						}
+						bootbox.alert(mensaje);
+					}else{
+						bootbox.alert("¡Error al actualizar el dato!");
+					}
+				},
+				error: function (data) {
+					console.log('Error:', data);
+					bootbox.alert("¡Error al actualizar el dato!");
+				},
+				complete: function(){
+					setTimeout(function() {
+						$("#preloader").fadeOut(500);
+					},200);
+				}
+			});
+			
+		});
+
+		/*función que lanza modal para crear dato*/
+		$('body').off('click',"#new_dato");
+		$('body').on('click', '#new_dato', function () {
+			$("#title_modal_dato").html("<b>Crear dato</b>");
+			$("#create_dato").css("display", "block");
+			$("#save_dato").css("display", "none");
+			$("#action_dato").modal();
+		});
+		/*función que crea un dato*/
+		$('body').off('click',"#create_dato");
+		$('body').on('click', '#create_dato', function () {
+			var nombre_dato = $("#nombre_dato").val();
+			
+			$("#preloader").css("display", "block");
+			var form = $("#form_dato")[0];
+			var formulario = new FormData(form);
+			
+			
+			$.ajax({
+				type: "post",
+				url: SITEURL + "/configuraciones/create_dato",
+				data:formulario,
+				enctype: 'multipart/form-data',
+				cache: false,
+				contentType: false,
+				processData: false,
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				success: function (data) {
+					if(data.status == "200"){
+						$("#action_dato").modal("hide");
+						$('.modal-backdrop').remove();
+						bootbox.alert("¡Dato añadido con éxito!");
+						var oTable = $('#table_datos').DataTable(); 
+						oTable.ajax.reload();
+					}else if (data.status == "422"){
+						var error = data.msg;
+						var mensaje = "";
+						for (var i in error) {
+							var error_msg = error[i];
+							mensaje = mensaje + error_msg+"<br>";
+						}
+						bootbox.alert(mensaje);
+					}else{
+						bootbox.alert("¡Error al añadir el dato!");
+					}
+				},
+				error: function (data) {
+					console.log('Error:', data);
+					bootbox.alert("¡Error al añadir el dato!");
+				},
+				complete: function(){
+					setTimeout(function() {
+						$("#preloader").fadeOut(500);
+					},200);
+				}
+			});
+			
+		});
 	  
 	});
 </script>

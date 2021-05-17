@@ -1475,6 +1475,7 @@ span.nombreusuario-color0{
     width: 3em;
     height: 3em;
     text-align: center;
+    cursor: pointer;
 }
 .btn-flotante i{
     width: 3em;
@@ -1487,10 +1488,7 @@ span.nombreusuario-color0{
     line-height: 3em;
 }
 .btn-flotante:hover {
-    background-color: #fff; /* Color de fondo al pasar el cursor */
-    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
-    transform: translateY(-7px);
-    color: var(--purple-primary);
+    
 }
 @media only screen and (max-width: 600px) {
     .btn-flotante {

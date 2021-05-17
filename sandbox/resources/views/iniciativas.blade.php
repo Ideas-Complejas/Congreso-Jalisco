@@ -96,12 +96,13 @@
 							</div>
 							<div class="card-body pb-1">
 								<p class="fecha--iniciativa"><i class="far fa-calendar-alt"></i> 
-								<?php echo date_format(new DateTime($value->fecha_final),"M d, Y"); ?></p>
+								<?php  setlocale(LC_TIME, "spanish");
+								echo strftime("%B %d, %Y",strtotime($value->fecha_inicial));?></p>
 								<h5 class="title-card--iniciativa">
 									<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){
 										echo $value->nombre_iniciativa;
 									}else{
-										echo "Nombre de la iniciativa";
+										echo "Iniciativa";
 									}?>
 								</h5>
 								<p class="text-card--iniciativa text-justify">{{$value->resumen}}</p>
@@ -125,7 +126,7 @@
 										echo '</ul>';
 									}?>
 								</div>
-								<?php
+								<?php 
 								$num_comentarios = 0;
 								$fecha_inicial = "";
 								$fecha_final = "";

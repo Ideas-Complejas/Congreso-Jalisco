@@ -20,6 +20,7 @@ use App\Notifications\SuscripcionIniciativaUsuario;
 use App\Notifications\ComentarioUsuario;
 use App\Notifications\ComentarioComision;
 use App\Models\ImagenesRandom;
+use App\Models\DatosAbiertos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
@@ -314,8 +315,9 @@ Route::get('/configuraciones', function () {
 	->leftJoin('imagenes_comisiones', 'imagenes_comisiones.id_comision', '=', 'conteo_iniciativas_comision.id_comision')
 	->orderBy("nombre_comision")->get();
 	
+	$categorias_datos = (object) array(array('nombre' =>  "Legislativo"),array('nombre' =>  "Otro"));
 	
-    return view('configuraciones', compact('comisiones'));
+    return view('configuraciones', compact('comisiones',"categorias_datos"));
 })->name("configuraciones");
 
 /*Routes para las acciones de usuarios en configuraciones*/
@@ -689,3 +691,47 @@ Route::get('/cancelar_suscripcion/{email}/{token}', function ($email,$token) {
 Auth::routes();
 
 
+
+
+
+
+/*ROUTE DE DATOS ABIERTOS*/
+
+Route::get('/datos', function () {
+
+	
+	/*Obtengo las imágenes que usaré en caso de que una iniciativa no tenga foto*/
+	$imagenes_random = ImagenesRandom::select("url_imagen")->get()->toArray();
+	$orden_exito = shuffle($imagenes_random); //Se mezclan
+	while($orden_exito == false){
+		$orden_exito = shuffle($imagenes_random);
+	}
+	$categorias_datos = array(array('nombre' =>  "Legislativo"),array('nombre' =>  "Otro"));
+	foreach ($categorias_datos as $key => $value) {
+		$categorias_datos[$key]["datos"] = DatosAbiertos::where("categoria",$value["nombre"])->get();
+	}
+    return view('datos_abiertos', compact('imagenes_random','categorias_datos'));
+})->name("datos");
+
+
+Route::get('/datos_categoria/{categoria?}', function ($categoria) {
+
+	/*Busca los datos abiertos*/
+	$datos = DatosAbiertos::where("categoria",$categoria)->get();
+	/*Obtengo las imágenes que usaré en caso de que una iniciativa no tenga foto*/
+	$imagenes_random = ImagenesRandom::select("url_imagen")->get()->toArray();
+	$orden_exito = shuffle($imagenes_random); //Se mezclan
+	while($orden_exito == false){
+		$orden_exito = shuffle($imagenes_random);
+	}
+
+	
+    return view('datos_categoria', compact('datos','imagenes_random','categoria'));
+})->name("datos_categoria");
+
+/*Route para los datos en las configuraciones*/
+Route::get('/configuraciones/get_dato/{id}', 'ConfiguracionesController@show_dato');
+Route::post('configuraciones/create_dato', 'ConfiguracionesController@store_dato');
+Route::get('/configuraciones/get_datos', 'ConfiguracionesController@get_datos');
+Route::get('/configuraciones/delete_dato/{id}', 'ConfiguracionesController@destroy_dato');
+Route::post('configuraciones/update_dato/{id}', 'ConfiguracionesController@update_dato');

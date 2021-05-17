@@ -162,12 +162,14 @@
 				<div class="col-lg-2 col-md-6 col-sm-6 mb-3" style="padding: 0.5em;">
 					<div class="card content-card-menu">
 						<div class="card-body" style="padding: 0.5em">
-							<div class="icon-menu--card">
-								<img src="icons/research.svg" alt="">
-							</div>
-							<div class="title-menu--card">
-								<h6>Datos abiertos</h6>
-							</div>
+							<a target="_blank" href="{{url('/datos')}}" style="text-decoration: none">
+								<div class="icon-menu--card">
+									<img src="icons/research.svg" alt="">
+								</div>
+								<div class="title-menu--card">
+									<h6>Datos abiertos</h6>
+								</div>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -206,41 +208,48 @@
 	<div class="container seccion-viñetas--container">
 		<div class="row">
 			<div class="col-md-4 col-sm-12">
-				<div class="content--viñetas">
-					<div class="icon-vinetas--container">
-						<img src="icons/chat.svg" alt="">
+				<a href="{{route('congreso')}}" target="_blank" style="text-decoration: none; cursor: pointer;">
+						<div class="content--viñetas">
+						<div class="icon-vinetas--container">
+							<img src="icons/chat.svg" alt="">
+						</div>
+						<div>
+							<h6 class="title--viñetas">Conoce</h6>
+							<p class="text--viñetas">Cómo funciona el Congreso del Estado de Jalisco, y cuál es la
+								terminología y los conceptos que se utilizan en la creación y modificación de las leyes.</p>
+						</div>
 					</div>
-					<div>
-						<h6 class="title--viñetas">Conoce</h6>
-						<p class="text--viñetas">Cómo funciona el Congreso del Estado de Jalisco, y cuál es la
-							terminología y los conceptos que se utilizan en la creación y modificación de las leyes.</p>
-					</div>
-				</div>
+				</a>
 			</div>
 			<div class="col-md-4 col-sm-12">
-				<div class="content--viñetas">
-					<div class="icon-vinetas--container">
-						<img src="icons/discussion.svg" alt="">
+				<a href="{{route('comisiones')}}" target="_blank" style="text-decoration: none; cursor: pointer;">
+					<div class="content--viñetas">
+						<div class="icon-vinetas--container">
+							<img src="icons/discussion.svg" alt="">
+						</div>
+						<div>
+							<h6 class="title--viñetas">Participa</h6>
+							<p class="text--viñetas">Aportando tus opiniones y propuestas a las iniciativas de ley que están
+								en discusión, para que los diputados integrantes de las Comisiones y Órganos Técnicos
+								enriquezcan las iniciativas.</p>
+						</div>
 					</div>
-					<div>
-						<h6 class="title--viñetas">Participa</h6>
-						<p class="text--viñetas">Aportando tus opiniones y propuestas a las iniciativas de ley que están
-							en discusión, para que los diputados integrantes de las Comisiones y Órganos Técnicos
-							enriquezcan las iniciativas.</p>
-					</div>
-				</div>
+				</a>
+				
 			</div>
 			<div class="col-md-4 col-sm-12">
-				<div class="content--viñetas">
-					<div class="icon-vinetas--container">
-						<img src="icons/expression.svg" alt="">
+				<a href="{{route('comisiones')}}" target="_blank" style="text-decoration: none; cursor: pointer;">
+					<div class="content--viñetas">
+						<div class="icon-vinetas--container">
+							<img src="icons/expression.svg" alt="">
+						</div>
+						<div>
+							<h6 class="title--viñetas">Opina</h6>
+							<p class="text--viñetas">Construye tus ideas y aporta tu punto de vista para enriquecer nuestras
+								leyes.</p>
+						</div>
 					</div>
-					<div>
-						<h6 class="title--viñetas">Opina</h6>
-						<p class="text--viñetas">Construye tus ideas y aporta tu punto de vista para enriquecer nuestras
-							leyes.</p>
-					</div>
-				</div>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -304,12 +313,15 @@
 						</div>
 						<div class="card-body pb-1">
 							<p class="fecha--iniciativa"><i class="far fa-calendar-alt"></i> 
-							<?php echo date_format(new DateTime($value->fecha_final),"M d, Y"); ?></p>
+							<?php 
+							setlocale(LC_TIME, "spanish");
+							echo strftime("%B %d, %Y",strtotime($value->fecha_inicial));
+						?></p>
 							<h5 class="title-card--iniciativa">
 								<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){
 									echo $value->nombre_iniciativa;
 								}else{
-									echo "Nombre de la iniciativa";
+									echo "Iniciativa";
 								}?>
 							</h5>
 							<p class="text-card--iniciativa text-justify">{{$value->resumen}}</p>
@@ -332,13 +344,15 @@
 									echo '</ul>';
 								}?>
 							</div>
-							<?php $num_comentarios = 0;
+							<?php 
+							$num_comentarios = 0;
 							$fecha_inicial = "";
 							$fecha_final = "";
 							if($value->comentarios){
 								$num_comentarios = count($value->comentarios);
 								
 								if($num_comentarios > 0){
+
 									$fecha_inicial = date_format(new DateTime($value->comentarios[0]->fecha_creacion),"d/m/Y");
 									$fecha_final = date_format(new DateTime($value->comentarios[$num_comentarios-1]->fecha_creacion),"d/m/Y");
 								}
@@ -406,7 +420,7 @@
 				</p>
 			</div>
 			<div class="col-md-4 d-flex justify-content-end align-items-center">
-				<a target="_blank" href="https://youtube.com/c/CanalParlamentoDeJalisco" target="_blank" class="btn-ver-todas" tabindex="-1" role="button" aria-disabled="true">Ver todas
+				<a target="_blank" href="https://youtube.com/c/CanalParlamentoDeJalisco" target="_blank" class="btn-ver-todas" tabindex="-1" role="button" aria-disabled="true">Ir al canal
 					<i class="fas fa-chevron-right"></i></a>
 			</div>
 		</div>

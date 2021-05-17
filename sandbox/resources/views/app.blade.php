@@ -30,7 +30,7 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="mailto:suley301194@gmail.com?subject=Buzón%20Congreso%20Jalisco" method="post" enctype="text/plain">
+						<form action="mailto:{{env('MAIL_MAILTO')}}?cc={{env('MAIL_MAILTO_CC')}}&&subject=Buzón%20Congreso%20Jalisco" method="post" enctype="text/plain">
 
 						
 							
