@@ -19,6 +19,7 @@ use App\Notifications\SuscripcionComisionUsuario;
 use App\Notifications\SuscripcionIniciativaUsuario;
 use App\Notifications\ComentarioUsuario;
 use App\Notifications\ComentarioComision;
+use App\Notifications\Buzon;
 use App\Models\ImagenesRandom;
 use App\Models\DatosAbiertos;
 use Illuminate\Http\Request;
@@ -235,7 +236,7 @@ Route::post('/comentar', function (Request $request) {
 				}
 				else{
 					$response["status"] = "422";
-					$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+					$response["msg"]= array("Error al subir el archivo");
 					
 				}
 			}
@@ -268,7 +269,9 @@ Route::post('/comentar', function (Request $request) {
 			Notification::send($usuarios_comision, new ComentarioComision($data,$iniciativa,$folio));
 			
 			
-			$response["status"] = "200";
+		 	if(array_key_exists('status', $response) != true){
+		   		$response["status"] = "200";
+		   	}
 			
 		}
 		DB::commit();
@@ -735,3 +738,53 @@ Route::post('configuraciones/create_dato', 'ConfiguracionesController@store_dato
 Route::get('/configuraciones/get_datos', 'ConfiguracionesController@get_datos');
 Route::get('/configuraciones/delete_dato/{id}', 'ConfiguracionesController@destroy_dato');
 Route::post('configuraciones/update_dato/{id}', 'ConfiguracionesController@update_dato');
+
+
+Route::post('send_comentario', function (Request $request) {
+	DB::beginTransaction();
+	try {
+		session_start();
+		$message = '';
+		if ( isset($_POST['securityCode']) && ($_POST['securityCode']!="")){
+		    if(strcasecmp($_SESSION['captcha'], $_POST['securityCode']) != 0){
+		    	
+		        $message = array("¡Ha introducido un código de seguridad incorrecto! Inténtelo de nuevo.");
+		        $response = array("status"=>"422", "msg" => $message);
+		        
+		    }else{
+				$data = array(
+					"body" => $request["body"],
+				);
+				$niceNames = array(
+					"body" => 'Comentario, queja o sugerencia',
+				);
+				$validator =  Validator::make(array_map('trim',$data), [
+					'body' => ['required', 'string', 'min:8'],
+				]);
+				$validator->setAttributeNames($niceNames); 
+				 //Si hay errores, retorna
+				if($validator->fails()){
+					$response = array("status"=>"422", "msg" => $validator->messages());
+				}else{
+					$body = $request["body"];
+					$cc = env('MAIL_MAILTO_CC');
+					Notification::route('mail',env('MAIL_MAILTO'))->notify(new Buzon($body, $cc));
+					
+					$response["status"] = "200";
+				   	
+					
+				}
+			}
+		}else {
+		    $message = array("Introduzca el código de seguridad.");
+		    $response = array("status"=>"422", "msg" => $message);
+		   
+		}
+		DB::commit();
+	}catch (\Illuminate\Database\QueryException $e) {
+		DB::rollback();
+		$response = array("status"=>"422", "msg" => ["Ocurrió un error en la base de datos, intenta más tarde. "], "error"=>$e);
+	}
+	
+	return response()->json($response,200);
+})->name("send_comentario");

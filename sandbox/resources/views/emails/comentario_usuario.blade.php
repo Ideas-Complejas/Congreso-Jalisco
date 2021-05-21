@@ -76,17 +76,17 @@
 				</div>
 				<div class="col-md-10" style="height: 10rem" >
 					
-					<div class="portada"  style="background-image: url('https://jalisco.ideascomplejas.com/public_html/imagenes_random/12.jpg');background-size: cover; background-position: center 30%; height: 100%!important">
+					<div class="portada"  style="background-image: url('{{asset('imagenes_random/12.jpg')}}';background-size: cover; background-position: center 30%; height: 100%!important">
 					</div>
 				</div>
 				<div class="col-md-10" style="background: white; padding: 3rem">
 					 
-					<div style="font-size: 1.0rem;"><img src="https://jalisco.ideascomplejas.com/public_html/img/icon/question.png" style="width: 1.3rem" alt="icono ayuda" /><a href="{{ url('/FAQ') }}" style="color: #0A7DD9; text-decoration: none;">¿Necesitas ayuda?</a></div>
+					<div style="font-size: 1.0rem;"><img src="{{asset('img/icon/question.png')}}" style="width: 1.3rem" alt="icono ayuda" /><a href="{{ url('/FAQ') }}" style="color: #0A7DD9; text-decoration: none;">¿Necesitas ayuda?</a></div>
 					
 				</div>
 				<div class="col-md-10" style="padding: 3rem; width: 100%">
 					 
-					<div style="font-size: 1.0rem; width: 48%; display: inline-block;"><img src="https://jalisco.ideascomplejas.com/public_html/img/logo.png" width="35%" alt="logo Ayuntamiento" /></div>
+					<div style="font-size: 1.0rem; width: 48%; display: inline-block;"><img src="{{asset('img/logo.png')}}" width="35%" alt="logo Ayuntamiento" /></div>
 					<div style="font-size: 1.0rem; width: 25%; display: inline-block;"><a href="" target="_blank" style="color: #FDC625; font-size: 1.0rem">Términos y condiciones</a></div>
 					<div style="font-size: 1.0rem; width: 25%; display: inline-block;"><a href="" target="_blank" style="color: #FDC625; font-size: 1.0rem">Aviso de privacidad</a></div>
 				</div>

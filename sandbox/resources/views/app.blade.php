@@ -30,19 +30,34 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<form action="mailto:{{env('MAIL_MAILTO')}}?cc={{env('MAIL_MAILTO_CC')}}&&subject=Buzón%20Congreso%20Jalisco" method="post" enctype="text/plain">
+						<form id="form_buzon">
+							{{ csrf_field() }}
 
-						
-							
-							
+													
 							<div class="form-group">
 								<label for="correo" class="col-form-label">Queja, sugerencia o comentario</label>
 								<textarea type="text" class="form-control validation" minlength="5" rows="5" name="body"></textarea>
 							</div>
-							<input class="btn btn-purple" type="submit" value="Enviar" />
+							<div class="form-group">
+								<label>Ingrese el código de seguridad</label>
+								
+								<input type="text" name="securityCode" id="securityCode" class="form-control" placeholder="Código de seguridad" required="">
+								<div class="invalid-feedback">Completa el campo</div>
+							</div>
+							<div class="form-group col-md-12">
+								<div class="row">
+									<label class="p-0 col-md-12 control-label"> <img style="border: 1px solid #D3D0D0" src="captcha.php?rand=<?php echo rand(); ?>" id='captcha'></label>
+
+									<div class="p-0 mt-2 col-md-12">
+										<a href="javascript:void(0)" id="reloadCaptcha" style="text-decoration: none; cursor: pointer;"><i class="ml-5 fas fa-redo refresh-captcha"></i>
+										 <span style="color:white">Recargar codigo</span></a>
+									</div>
+								</div>
+							</div>
 						
 							
 						</form>
+						<button id="send_buzon" class="btn btn-purple">Enviar</button>
 					</div>
 					
 				</div>
@@ -101,7 +116,70 @@
 		<script src="{{ asset('DataTables/datatables-full.js') }}" defer></script>
 		<script src="{{ asset('DataTables/js/vfs_fonts.js') }}" defer></script>
 		<script src="{{ asset('js/jquery.expander.js') }}" defer></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var SITEURL = '{{URL::to('')}}'; 
+				var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+				//Función que crea una suscripcion en una iniciativa
+				$('body').off('click',"#send_buzon");
+				$('body').on('click', '#send_buzon', function () {
+					var idp = $(this).attr("idp");
+					var idi = $(this).attr("idi");
+					
+					$("#preloader").css("display", "block");
+					var formulario = $("#form_buzon").serialize();
 
+
+					$.ajax({
+						type: "post",
+						url: SITEURL + "/send_comentario",
+						data:formulario,
+						headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+						success: function (data) {
+							if(data.status == "200"){
+								$("#modal-buzon").modal("hide");
+								$('.modal-backdrop').remove();
+								bootbox.alert({
+									message: "¡Mensaje enviado con éxito!",
+									callback: function () {
+										setTimeout(function() {
+											location.reload();
+										},200);
+									}
+								});
+								
+							}else if (data.status == "422"){
+								var error = data.msg;
+								var mensaje = "";
+								for (var i in error) {
+									var error_msg = error[i];
+									mensaje = mensaje + error_msg+"<br>";
+								}
+								bootbox.alert(mensaje);
+							}else{
+								bootbox.alert("¡Error al enviar el mensaje!");
+							}
+						},
+						error: function (data) {
+							console.log('Error:', data);
+							bootbox.alert("¡Error al enviar el mensaje!");
+						},
+						complete: function(){
+							setTimeout(function() {
+								$("#preloader").fadeOut(500);
+							},200);
+						}
+					});
+					
+				});
+			});
+			$("#reloadCaptcha").click(function(){
+	  			var captchaImage = $('#captcha').attr('src');
+	  			captchaImage = captchaImage.substring(0,captchaImage.lastIndexOf("?"));
+	  			captchaImage = captchaImage+"?rand="+Math.random()*1000;
+	  			$('#captcha').attr('src', captchaImage);
+	  		});
+		</script>
 		@yield('scripts')
 	</body>
 </html>

@@ -21,7 +21,7 @@
 				<p class="text-card--iniciativa text-justify">{{$iniciativa->resumen}}
 				</p>
 				<p class="fecha--iniciativa"><i class="far fa-calendar-alt"></i> <?php setlocale(LC_TIME, "spanish");
-					echo strftime("%B %d, %Y",strtotime($value->fecha_final));?></p></p>
+					echo strftime("%B %d, %Y",strtotime($iniciativa->fecha_final));?></p></p>
 			</div>
 			<div class="container-comision-autor">
 				<div>

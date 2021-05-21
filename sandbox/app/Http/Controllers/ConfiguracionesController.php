@@ -644,7 +644,7 @@ class ConfiguracionesController extends Controller
 					}
 					else{
 						$response["status"] = "422";
-						$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+						$response["msg"]= array("Error al subir el archivo");
 						
 					}
 				}
@@ -671,8 +671,10 @@ class ConfiguracionesController extends Controller
 					$id_iniciativa = $response->id;
 				
 				}
-			   
-				$response["status"] = "200";
+			   	if(array_key_exists('status', $response) != true){
+			   		$response["status"] = "200";
+			   	}
+				
 				
 			}
 			DB::commit();
@@ -881,7 +883,9 @@ class ConfiguracionesController extends Controller
 					]);
 					$id_dato = $response->id;
 					
-					$response["status"] = "200";
+					if(array_key_exists('status', $response) != true){
+			   			$response["status"] = "200";
+			   		}
 					
 				}
 				DB::commit();
@@ -975,7 +979,7 @@ class ConfiguracionesController extends Controller
 						}
 						else{
 							$response["status"] = "422";
-							$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+							$response["msg"]= array("Error al subir el archivo");
 							
 						}
 					}
@@ -988,7 +992,9 @@ class ConfiguracionesController extends Controller
 						
 					]); 
 					 
-					$response["status"] = "200";
+					if(array_key_exists('status', $response) != true){
+			   			$response["status"] = "200";
+			   		}
 					
 				}
 				DB::commit();
