@@ -2293,6 +2293,7 @@
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: function (data) {
 					if(data.status == "200"){
+						$("#url_portada").attr("src","");
 						$("#url_portada").attr("src","{{asset('')}}"+data.msg.url_portada);
 						$("#form_change_portada")[0].reset();
 						bootbox.alert("¡Portada actualizada con éxito!");
