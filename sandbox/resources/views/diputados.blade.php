@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="header--container">
-	<div class="header-img-container"  style="background-image: url('{{asset('img/jalisco-hemiciclo.jpg')}}');">
+	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
 			<div class="row h-100 justify-content-center align-items-center">
 				<div class=" col-md-8 header-text-content">

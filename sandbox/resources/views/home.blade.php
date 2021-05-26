@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="header--container">
-	<div class="header-img-container"  style="background-image: url('{{asset('img/jalisco-hemiciclo.jpg')}}');">
+	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
 			<div class="row h-100 justify-content-center align-items-center">
 				<div class=" col-md-8 header-text-content">
@@ -184,20 +184,20 @@
 			<div class="col-md-6 col-sm-12">
 				<h3 class="title--congreso line-border-bottom">¿Qué es Congreso Jalisco abierto?</h3>
 				<div class="text--congreso text-justify">
-					<p>Es una plataforma digital creada para fomentar la participación ciudadana en el proceso de
+					<p>Es una Plataforma digital creada para fomentar la participación ciudadana en el proceso de
 						creación de leyes y donde podrás conocer todo el actuar del Poder Legislativo.</p>
 					<p>Con ésta herramienta puedes conocer, consultar y opinar respecto de las iniciativas de Ley y de
-						Decreto que son turnadas a las Comisiones legislativas; y en donde también podrás consultar la
+						Decreto que son turnadas a las Comisiones Legislativas; y en donde también podrás consultar la
 						legislación vigente en el Estado de Jalisco, conocer el proceso legislativo y saber quiénes son
 						nuestros diputados.</p>
 					<p>Puedes suscribirte a la Comisión Legislativa que sea de tu interés para que te lleguen avisos
-						respecto de alguna iniciativa de ley o de decreto, además podrás visualizar las Sesiones
+						respecto de alguna iniciativa de ley o de decreto, además podrás visualizar las sesiones
 						completas sin cortes del Pleno y sus Comisiones.</p>
 				</div>
 			</div>
 			<div class="col-md-6 col-sm-12">
 				<div class="container-img--congreso">
-					<div class="img img-bg" style="background-image: url('img/jalisco-hemiciclo.jpg');"></div>
+					<div class="img img-bg" style="background-image: url('{{asset('img/portada.png')}}');"></div>
 				</div>
 			</div>
 		</div>
@@ -415,7 +415,7 @@
 	<div class="container-seccion container--canal-parlamento bg-color-light">
 		<div class="row mb-3">
 			<div class="col-md-8">
-				<h3 class="title--canal-parlamento line-border-bottom">Canal parlamento de Jalisco</h3>
+				<h3 class="title--canal-parlamento line-border-bottom">Canal Parlamento de Jalisco</h3>
 				<p class="subtext--canal-parlamento">Consulta las transmisiones del pleno del congreso y sus comisiones.
 				</p>
 			</div>

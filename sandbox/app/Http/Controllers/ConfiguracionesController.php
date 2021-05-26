@@ -1077,4 +1077,79 @@ class ConfiguracionesController extends Controller
 	}
 
 	
+	//Función que crea un dato
+	public function change_portada(Request $request){
+		if(Auth::user()->hasRole("Administrador") == true){ //si es administrador puede realizar lo siguiente
+			DB::beginTransaction();
+			try {
+				$file =$request->file('file');
+				if($file){
+					
+				   
+
+					if($_FILES['file']['tmp_name'] != NULL){
+						$mimetype = mime_content_type($_FILES['file']['tmp_name']);
+
+
+						if(in_array($mimetype, array("image/jpeg","image/png"))) {
+							$file = $_FILES['file'];
+							$size = $file["size"];
+
+							if($size > "3145728"){ //3MB
+								$response["status"] = "422";
+								$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+								
+
+							}else{
+								$image = $_FILES['file']['tmp_name'];
+								switch (exif_imagetype($image)) {
+								    case IMAGETYPE_GIF :
+								        $img = imagecreatefromgif($image);
+								        break;
+								    case IMAGETYPE_JPEG :
+								        $img = imagecreatefromjpeg($image);
+								        break;
+								    default :
+								        $response["status"] = "422";
+										$response["msg"]= array("Error en el formato de imagen");
+										break;
+								}
+								
+								$filename = $_SERVER['DOCUMENT_ROOT'] ."".$_SERVER['PHP_SELF']."img/portada.png";
+								$filename = str_replace("index.php", "", $filename);
+								imagepng($img, $filename);
+								$response["status"] = "200";
+								$response["msg"]["url_portada"]= "img/portada.png";
+
+							}
+							
+
+						} else {
+							$response["status"] = "422";
+							$response["msg"]= array("El formato del archivo es incorrecto, solo se permiten los siguientes formatos: .jpe .jpeg .jpg, .png");
+							
+						}
+					}
+					else{
+						$response["status"] = "422";
+						$response["msg"]= array("El tamaño del archivo no debe superar los 3MB");
+						
+					}
+				}else{
+					$response = array("status"=>"422", "msg" => ["Debe subir una nueva imagen"]);
+				}
+
+					
+				DB::commit();
+			}catch (\Illuminate\Database\QueryException $e) {
+				DB::rollback();
+				$response = array("status"=>"422", "msg" => ["Ocurrió un error en la base de datos, intenta más tarde. "], "error"=>$e);
+			}
+			
+			return response()->json($response,200);
+		}else{
+			abort(403, 'Acción no autorizada.');
+			return redirect('/');
+		}
+	}
 }

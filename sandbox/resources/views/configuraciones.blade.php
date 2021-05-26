@@ -365,6 +365,45 @@
 				<div class="card card-sombra">
 					<div class="card-header content-card-header">
 						<div class="title-card-header">
+						   <h5>Portada</h5>
+						</div>
+						
+						 <small>Aquí podrás cambiar la imagen de la portada</small>
+					</div>
+					<div class="card-body">
+						
+							
+							
+						<div class="row">
+							<div class="col-md-2">
+								<img id="url_portada" src="{{asset('img/portada.png')}}" style="height: 100px;">
+							</div>
+							<div class="col-md-4 m-auto">
+								<form id="form_change_portada" autocomplete="off" autocomplete="nope">
+								{{ csrf_field() }}
+									<label>Subir nueva imagen</label>
+									<input type="file" name="file">
+								</form>
+							</div>
+							<div class="col-md-2 m-auto">
+								<button class="btn btn-purple" id="guardar_portada">Guardar</button>
+							</div>
+						</div>
+						
+
+					</div>
+				</div>
+			</div>
+		<?php }?>
+	</div>
+	<div class="row p-5">
+		<?php
+		
+		if(Auth::user()->hasRole("Administrador") == true){?>
+			<div class="col-md-12">
+				<div class="card card-sombra">
+					<div class="card-header content-card-header">
+						<div class="title-card-header">
 						   <h5>Usuarios</h5>
 						</div>
 						<div class="button-card-header">
@@ -2223,6 +2262,56 @@
 				error: function (data) {
 					console.log('Error:', data);
 					bootbox.alert("¡Error al añadir el dato!");
+				},
+				complete: function(){
+					setTimeout(function() {
+						$("#preloader").fadeOut(500);
+					},200);
+				}
+			});
+			
+		});
+
+
+		/*función para editar un dato*/ 
+		$('body').off('click',"#guardar_portada");
+		$('body').on('click', '#guardar_portada', function () {
+			$("#preloader").css("display", "block");
+			
+
+			var form = $("#form_change_portada")[0];
+			var formulario = new FormData(form);
+			
+			$.ajax({
+				type: "post",
+				url: SITEURL + "/configuraciones/change_portada",
+				data:formulario,
+				enctype: 'multipart/form-data',
+				cache: false,
+				contentType: false,
+				processData: false,
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				success: function (data) {
+					if(data.status == "200"){
+						$("#url_portada").attr("src","{{asset('')}}"+data.msg.url_portada);
+						$("#form_change_portada")[0].reset();
+						bootbox.alert("¡Portada actualizada con éxito!");
+						
+					}else if (data.status == "422"){
+						var error = data.msg;
+						var mensaje = "";
+						for (var i in error) {
+							var error_msg = error[i];
+							mensaje = mensaje + error_msg+"<br>";
+						}
+						bootbox.alert(mensaje);
+					}else{
+						bootbox.alert("¡Error al actualizar el dato!");
+					}
+				},
+				error: function (data) {
+					console.log('Error:', data);
+					bootbox.alert("¡Error al actualizar el dato!");
 				},
 				complete: function(){
 					setTimeout(function() {

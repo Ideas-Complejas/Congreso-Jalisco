@@ -21,6 +21,7 @@ use App\Notifications\ComentarioUsuario;
 use App\Notifications\ComentarioComision;
 use App\Notifications\Buzon;
 use App\Models\ImagenesRandom;
+use App\Models\ImagenesRandomDato;
 use App\Models\DatosAbiertos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -318,7 +319,7 @@ Route::get('/configuraciones', function () {
 	->leftJoin('imagenes_comisiones', 'imagenes_comisiones.id_comision', '=', 'conteo_iniciativas_comision.id_comision')
 	->orderBy("nombre_comision")->get();
 	
-	$categorias_datos = (object) array(array('nombre' =>  "Legislativo"),array('nombre' =>  "Otro"));
+	$categorias_datos = (object) array(array('nombre' =>  "Legislativo"),array('nombre' =>  "Administrativo"),array('nombre' =>  "Otro"));
 	
     return view('configuraciones', compact('comisiones',"categorias_datos"));
 })->name("configuraciones");
@@ -704,12 +705,12 @@ Route::get('/datos', function () {
 
 	
 	/*Obtengo las imágenes que usaré en caso de que una iniciativa no tenga foto*/
-	$imagenes_random = ImagenesRandom::select("url_imagen")->get()->toArray();
+	$imagenes_random = ImagenesRandomDato::select("url_imagen")->get()->toArray();
 	$orden_exito = shuffle($imagenes_random); //Se mezclan
 	while($orden_exito == false){
 		$orden_exito = shuffle($imagenes_random);
 	}
-	$categorias_datos = array(array('nombre' =>  "Legislativo"),array('nombre' =>  "Otro"));
+	$categorias_datos = array(array('nombre' =>  "Legislativo"),array('nombre' =>  "Administrativo"),array('nombre' =>  "Otro"));
 	foreach ($categorias_datos as $key => $value) {
 		$categorias_datos[$key]["datos"] = DatosAbiertos::where("categoria",$value["nombre"])->get();
 	}
@@ -788,3 +789,5 @@ Route::post('send_comentario', function (Request $request) {
 	
 	return response()->json($response,200);
 })->name("send_comentario");
+
+Route::post('configuraciones/change_portada', 'ConfiguracionesController@change_portada');

@@ -3,9 +3,9 @@
 		<div class="row">
 			<div class="col-md-6">
 				<img src="{{asset('img/logo.png')}}" alt="" style="width: 70px;">
-				<h6 class="title--footer">Congreso Jalisco abierto</h6>
+				<h6 class="title--footer">Congreso Jalisco Abierto</h6>
 				<div class="text-datos--footer">
-					<p>Hidalgo #222, Guadalajara, Jalisco, Mexico</p>
+					<p>Hidalgo #222, Guadalajara, Jalisco, México</p>
 					<p>333679 1515</p>
 				</div>
 			</div>

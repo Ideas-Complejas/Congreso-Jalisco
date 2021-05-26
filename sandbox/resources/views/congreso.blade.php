@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="header--container">
-	<div class="header-img-container" style="background-image: url('{{asset('img/jalisco-hemiciclo.jpg')}}');">
+	<div class="header-img-container" style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
 			<div class="row h-100 justify-content-center align-items-center">
 				<div class=" col-md-8 header-text-content">
@@ -32,6 +32,7 @@
 						sociedad</p>
 				</div>
 				<div class="content-text-presentacion" data-aos="fade-up" data-aos-delay="100">
+					<h5 class="title-paso-infografia">¿QUIÉN PUEDE PRESENTARLA?</h5>
 					<p class="subtitle-paso-infografia">El Gobernador del Estado;</p>
 					<p class="text-infografia">Los Diputados;
 						El Supremo tribunal de Justicia del Estado;
@@ -50,7 +51,7 @@
 						un dictamen donde proponen al pleno del congreso su aprobación.</p>
 				</div>
 				<div class="content-text-discusion" data-aos="fade-up" data-aos-delay="200">
-					<p class="subtitle-paso-infografia">El Gobernador del Estado;</p>
+					
 					<p class="text-infografia">El dictamen puede proponer:</p>
 					<ul style="width: 80%;">
 						<li class="text-infografia">Aprobar la iniciativa tal y como se planteó de un inicio</li>
@@ -81,9 +82,9 @@
 						discusión, algunos se expresan a favor y otros en contra.</p>
 				</div>
 				<div class="content-text-aprobacion" data-aos="fade-up" data-aos-delay="300">
-					<p class="subtitle-paso-infografia">El Gobernador del Estado;</p>
+					
 					<p class="text-infografia">Agotada la discusión, se pone a votación la propuesta. El sentido del
-						voto puede ser a favor, en contra o en abstención de lograr el mayor consenso posible.</p>
+						voto puede ser a favor, en contra o en abstención.</p>
 				</div>
 			</div>
 		</div>
@@ -96,9 +97,9 @@
 						Constitución o la viabilidad económica u operativa, entre otras.</p>
 				</div>
 				<div class="content-text-sancion" data-aos="fade-up" data-aos-delay="300">
-					<p class="text-infografia">Si existen observaciones se regresa al congreso la minuta de ley o de
+					<p class="text-infografia">Si existen observaciones se regresa al Congreso la minuta de ley o de
 						decreto (hasta en una ocasión) para estudiar y resolver dichas observaciones.
-						Si el congreso insiste en su propuesta original, el Gobernador del estado debe promulgar la ley
+						Si el Congreso insiste en su propuesta original, el Gobernador del estado debe promulgar la ley
 						o decreto.</p>
 				</div>
 			</div>
@@ -120,7 +121,7 @@
 				<div class="content-title-promulgacion" data-aos="fade-up">
 					<h6 class="numero-infografia">O5</h6>
 					<h5 class="title-paso-infografia">PROMULGACIÓN</h5>
-					<p class="text-infografia">Para que una ley o un decreto puedan ser obligatorios deben ser publicador en el Periódico Oficial del Estado de jalisco. Esta publicación le da vida al trabajo del congreso del Estado y le da formalidad a la nueva norma.</p>
+					<p class="text-infografia">Para que una ley o un decreto puedan ser obligatorios deben ser publicados en el Periódico Oficial El Estado de jalisco. Esta publicación le da vida al trabajo del Congreso del Estado y le da formalidad a la nueva norma.</p>
 				</div>
 			</div>
 		</div>
@@ -132,7 +133,7 @@
 				</div>
 				<div class="content-text-vigencia" data-aos="fade-up" data-aos-delay="200">
 					<p class="subtitle-paso-infografia">¡Mision cumplida!</p>
-					<p class="text-infografia">Aquí empiezan a ser obligatorias para todos, las propuestas de ley o decreto que nacieron como un simple sueño; la iniciativa legislativa</p>
+					<p class="text-infografia">Aquí empiezan a ser obligatorias para todos, las propuestas de ley o decreto.</p>
 				</div>
 			</div>
 			<div class="col-md-6 col-lg-2 infografia-img--container">

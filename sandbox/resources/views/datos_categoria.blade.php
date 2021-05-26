@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="header--container">
-	<div class="header-img-container"  style="background-image: url('{{asset('img/jalisco-hemiciclo.jpg')}}');">
+	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
 			<div class="row h-100 justify-content-center align-items-center">
 				<div class=" col-md-8 header-text-content">
@@ -40,7 +40,7 @@
 	<div class="tab-content" id="pills-tabContent">
 		<div class="tab-pane fade show active" id="tab-card" role="tabpanel" aria-labelledby="pills-home-tab">
 
-			<?php if($datos){
+			<?php if($datos && count($datos)>0){
 				$contador = 0;
 				$contador_imagenes = 0;
 				foreach ($datos as $key => $value) {
@@ -113,6 +113,8 @@
 				 if(count($datos)%3 != 0){
 					echo '</div>';
 				}
+			}else{
+				echo "<div class='col-md-12 p-0'><h3>Esta categoría está vacía</h3></div>";
 			}?>
 		</div>
 		<div class="tab-pane fade" id="tab-list" role="tabpanel" aria-labelledby="pills-profile-tab">
