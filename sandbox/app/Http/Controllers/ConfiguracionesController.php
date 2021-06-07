@@ -970,7 +970,7 @@ class ConfiguracionesController extends Controller
 					}
 
 					//Se crea el dato
-					$response = DatosAbiertos::create([
+					$response["resp"] = DatosAbiertos::create([
 						'titulo' => $data['titulo'],
 						'descripcion' => $data['descripcion'],
 						'url_imagen'=> $url_imagen,
