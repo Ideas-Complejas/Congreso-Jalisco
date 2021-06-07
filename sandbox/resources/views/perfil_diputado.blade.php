@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
+<!--contenido de la portada del perfil del diputado-->
 <div class="header--container">
 	<div class="header-img-container" style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
@@ -18,9 +18,11 @@
 	<div class="mt-5 mb-5">
 		<div class="row">
 			<div class="col-md-4">
+				<!--foto del diputado-->
 				<div style="background-image: url('{{$diputado->fotos}}');" class="img-perfil-diputado img-bg">
 				</div>
 			</div>
+			<!--datos del diputado-->
 			<div class="col-md-8">
 				<div class="content--name-diputado">
 					<p class="text-name-diputado-perfil">Dip. {{$diputado->nombre}} {{$diputado->apellido_pat}} {{$diputado->apellido_m}}</p>

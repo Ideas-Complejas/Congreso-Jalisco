@@ -18,6 +18,7 @@ class SuscripcionComisionUsuario extends Notification
 	 *
 	 * @return void
 	 */
+	//Recibe las variables del Controlador
 	public function __construct($data, $nombre_comisiones)
 	{
 		$this->data = $data;
@@ -43,7 +44,7 @@ class SuscripcionComisionUsuario extends Notification
 	 */
 	public function toMail($notifiable)
 	{
-		
+		//Hace el envío del mensaje, pasando al view las variables
 		return (new MailMessage)
 		->subject('Suscripción realizada con éxito, Congreso Jalisco')
 		->view(

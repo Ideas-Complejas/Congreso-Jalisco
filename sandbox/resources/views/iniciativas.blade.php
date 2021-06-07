@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
+<!--contenido de la portada de iniciativas-->
 <div class="header--container">
 	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
@@ -17,20 +17,18 @@
 		</div>
 	</div>
 </div>
-<div class="search-bar-area mt-5">
-	<div class="container--search-bar">
-		
-	</div>
-</div>
-<section class="container-seccion container-table--iniciativas">
+
+<section class="container-seccion container-table--iniciativas mt-5">
 	<div class="row mb-4">
 		<div class="col-md-6">
 			<div class="nav-tabs-iniciativas">
 				<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+					<!--para ver las iniciativas en forma de cards-->
 					<li class="nav-item" role="presentation">
 						<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab-card" role="tab"
 							aria-controls="pills-home" aria-selected="true"><i class="fas fa-th"></i></a>
 					</li>
+					<!--para ver las iniciativas en forma de lista-->
 					<li class="nav-item" role="presentation">
 						<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#tab-list" role="tab"
 							aria-controls="pills-profile" aria-selected="false"><i class="fas fa-list"></i></a>
@@ -39,7 +37,7 @@
 			</div>
 		</div>
 		<div class="col-md-6 d-flex justify-content-end align-items-center">
-			
+			<!--botón para suscribirse a iniciativas-->
 			<button type="button" class="button-suscribe"  data-toggle="tooltip" data-placement="top" title="Suscríbete" id="button-suscribe">
 				<span class="icon-suscribe"></span>
 			</button>
@@ -47,24 +45,25 @@
 	</div>
 
 	<div class="tab-content" id="pills-tabContent">
+		<!--para ver las iniciativas en forma de cards-->
 		<div class="tab-pane fade show active" id="tab-card" role="tabpanel" aria-labelledby="pills-home-tab">
 
-		   <?php if($iniciativas && count($iniciativas)>0){
+		   <?php if($iniciativas && count($iniciativas)>0){ //Si existen iniciativas en esa comisión
 				$contador = 0;
 				$contador_imagenes = 0;
 				$cantidad_imagenes_aleatorias = count($imagenes_random);
-				foreach ($iniciativas as $key => $value) {
-					if($contador == 0){
+				foreach ($iniciativas as $key => $value) { //Recorre cada una
+					if($contador == 0){ //Esto se hace para definir una fila
 						echo '<div class="row mb-3">';
 					}
 
 
-					if($value->url_imagen != null && $value->url_imagen != ""){
-						if(\File::exists(public_path()."/".$value->url_imagen)){
+					if($value->url_imagen != null && $value->url_imagen != ""){ //Si la iniciativa no tiene imagen
+						if(\File::exists(public_path()."/".$value->url_imagen)){ //Si existe la imagen, toma la imagen
 
 							$url = str_replace(" ", "%20", asset($value->url_imagen));
 							$array_imagenes_utilizadas[] = $url;
-						}else{
+						}else{ //si no, busca una random
 							$url = str_replace(" ", "%20", asset($imagenes_random[$contador_imagenes]["url_imagen"]));
 							
 							if($contador_imagenes == (count($imagenes_random)-1)){
@@ -76,7 +75,7 @@
 							}
 							$contador_imagenes++;
 						}
-					}else{
+					}else{ //si no, busca una random
 					
 						$url = str_replace(" ", "%20", asset($imagenes_random[$contador_imagenes]["url_imagen"]));
 						if($contador_imagenes == (count($imagenes_random)-1)){
@@ -99,9 +98,9 @@
 								<?php  setlocale(LC_TIME, "spanish");
 								echo strftime("%B %d, %Y",strtotime($value->fecha_inicial));?></p>
 								<h5 class="title-card--iniciativa">
-									<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){
+									<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){ //Si la iniciativa tiene nombre
 										echo $value->nombre_iniciativa;
-									}else{
+									}else{ //Si no, pone default Iniciativa
 										echo "Iniciativa";
 									}?>
 								</h5>
@@ -112,9 +111,9 @@
 								</div>
 								<div class="mb-5">
 									<p class="subtitle-card--iniciativa">Autor(es):</p>
-									<?php if($value->autores){
+									<?php if($value->autores){ //Si hay autores
 										echo '<ul class="lista-autores">';
-										foreach ($value->autores as $key_a => $value_a) {
+										foreach ($value->autores as $key_a => $value_a) { //Los va mostrando
 											if($key_a < 3){
 												
 												echo '<li><span>'.$value_a->nombre_remitente.'</span></li>';
@@ -130,10 +129,11 @@
 								$num_comentarios = 0;
 								$fecha_inicial = "";
 								$fecha_final = "";
-								if($value->comentarios){
+								if($value->comentarios){ //Si hay comentarios
 									$num_comentarios = count($value->comentarios);
 									
 									if($num_comentarios > 0){
+										//Define la fecha inicial y final de los comentarios
 										$fecha_inicial = date_format(new DateTime($value->comentarios[0]->fecha_creacion),"d/m/Y");
 										$fecha_final = date_format(new DateTime($value->comentarios[$num_comentarios-1]->fecha_creacion),"d/m/Y");
 									}
@@ -148,15 +148,16 @@
 							</div>
 							<div class="card-footer bg-transparent footer-card--iniciativa">
 								<div class="call-card--iniciativa">
+									<!--botón para lanzar el modal de comentar iniciativa-->
 									<button type="button" class="button-comentar" idp="{{$value->id_principal}}" idi="{{$value->infolej}}">
 										<span class="icon-card comentar"></span>
 										Comentar
 									</button>
-
+									<!--botón para ver el vídeo de la iniciativa-->
 									<button type="button" class="button-video" id="button_ver_video" idv='{{$value->url_video}}'>
-										<span class="icon-card video"></span>Ver video
+										<span class="icon-card video"></span>Ver vídeo
 									</button>
-
+									<!--botón para mandar a ver detalle de la iniciativa-->
 									<a href="{{ url('detalle_iniciativa') }}/{{$value->infolej}}/{{$value->id_principal}}" class="button-detalle">ver detalle<i
 											class="fas fa-chevron-right"></i></a>
 								</div>
@@ -165,7 +166,7 @@
 					</div>
 				<?php 
 					$contador ++;
-					if($contador%3 == 0){
+					if($contador%3 == 0){  //Esto se hace para cerrar una fila
 						echo '</div>';
 						$contador = 0;
 					}
@@ -173,6 +174,7 @@
 				if(count($iniciativas)%3 != 0){
 					echo '</div>';
 				}?>
+				<!--muestra el paginador de las iniciativas-->
 				<div class="col-md-12 pt-2 pb-5 pr-0 pl-0">
 					<div class="float-right">
 						{{ $iniciativas->links( "pagination::bootstrap-4") }}
@@ -183,11 +185,12 @@
 				echo "<div class='col-md-12'><h3>Esta comisión no tiene ninguna iniciativa</h3></div>";
 			}?>
 		</div>
+		<!--para ver las iniciativas en forma de lista-->
 		<div class="tab-pane fade" id="tab-list" role="tabpanel" aria-labelledby="pills-profile-tab">
 
-			<?php if($iniciativas && count($iniciativas)>0){
+			<?php if($iniciativas && count($iniciativas)>0){ //Si existen las iniciativas
 				$contador = 0;
-				foreach ($iniciativas as $key => $value) {?>
+				foreach ($iniciativas as $key => $value) { //Recorre cada iniciativa?>
 					<div class="border-top"></div>
 					<div class="row mb-4">
 						<div class="col-md-2">
@@ -198,9 +201,9 @@
 						</div>
 						<div class="col-md-8">
 							<h5 class="title-card--iniciativa">
-								<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){
+								<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){ //Si la iniciativa tiene nombre
 									echo $value->nombre_iniciativa;
-								}else{
+								}else{ //Si no, pone default Iniciativa
 									echo "Nombre de la iniciativa";
 								}?>
 								
@@ -213,9 +216,9 @@
 								</div>
 								<div class="mr-2">
 									<p class="subtitle-card--iniciativa">Autor(es):</p>
-									<?php if($value->autores){
+									<?php if($value->autores){ //Si hay autores
 										echo '<ul class="lista-autores">';
-										foreach ($value->autores as $key_a => $value_a) {
+										foreach ($value->autores as $key_a => $value_a) { //Los va mostrando
 											if($key_a < 3){
 												
 												echo '<li><span>'.$value_a->nombre_remitente.'</span></li>';
@@ -229,15 +232,16 @@
 								</div>
 							</div>
 							<div class="call-card--iniciativa">
-									<button type="button" class="button-comentar" idp="{{$value->id_principal}}" idi="{{$value->infolej}}">
+								<!--botón para lanzar el modal de comentar iniciativa-->
+								<button type="button" class="button-comentar" idp="{{$value->id_principal}}" idi="{{$value->infolej}}">
 									<span class="icon-card comentar"></span>
 									Comentar
 								</button>
-
+								<!--botón para ver el vídeo de la iniciativa-->
 								<button type="button" class="button-video" id="button_ver_video" idv='{{$value->url_video}}'>
-									<span class="icon-card video"></span>Ver video
+									<span class="icon-card video"></span>Ver vídeo
 								</button>
-
+								<!--botón para mandar a ver detalle de la iniciativa-->
 								<a href="{{ url('detalle_iniciativa') }}/{{$value->infolej}}/{{$value->id_principal}}" class="button-detalle">ver detalle<i class="fas fa-chevron-right"></i>
 								</a>
 
@@ -249,10 +253,11 @@
 								$num_comentarios = 0;
 								$fecha_inicial = "";
 								$fecha_final = "";
-								if($value->comentarios){
+								if($value->comentarios){  //Si hay comentarios
 									$num_comentarios = count($value->comentarios);
 									
 									if($num_comentarios > 0){
+										//Define la fecha inicial y final de los comentarios
 										$fecha_inicial = date_format(new DateTime($value->comentarios[0]->fecha_creacion),"d/m/Y");
 										$fecha_final = date_format(new DateTime($value->comentarios[$num_comentarios-1]->fecha_creacion),"d/m/Y");
 									}
@@ -261,7 +266,8 @@
 							<div class="border-left"></div>
 							<div class="comentarios-list--container">
 								<p class="text-card--iniciativa mb-0">
-										<span class="icon-card comentario"></span>{{$num_comentarios}} Comentario(s)</p>
+									<span class="icon-card comentario"></span>{{$num_comentarios}} Comentario(s)
+								</p>
 								<p><small class="text-muted"><?php echo $fecha_inicial." - ".$fecha_final; ?></p></small></p>
 							</div>
 						</div>
@@ -271,13 +277,14 @@
 				<?php 
 					
 				}?>
+				<!--muestra la paginación de las iniciativas-->
 				<div class="col-md-12 pt-2 pb-5 pr-0 pl-0">
 					<div class="float-right">
 						{{ $iniciativas->links( "pagination::bootstrap-4") }}
 					</div>
 				</div>
 
-			<?php }else{
+			<?php }else{ //Si la comisión no tiene iniciativas, muestra el siguiente texto
 				echo "<div class='col-md-12'><h3>Esta comisión no tiene ninguna iniciativa</h3></div>";
 			}?>
 
@@ -300,6 +307,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
+					<!--formulario para suscribir a las iniciativas de esa comisión-->
 					<form class="form-suscribe" id="form-suscripcion">
 						{{ csrf_field() }}
 						<div class="form-group">
@@ -314,12 +322,12 @@
 						</div>
 						<p class="title-select--input">Elije las iniciativas a las que deseas recibir
 						notificaciones</p>
-						<?php if($iniciativas){
+						<?php if($iniciativas){ //Si hay iniciativas en esa comisión
 							echo '<div class="mt-3">';
-							foreach ($iniciativas as $key => $value) {
+							foreach ($iniciativas as $key => $value) { //Las va mostrando
 								if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){
 									echo '<div class="custom-control custom-checkbox checkbox-iniciativa">
-										<input type="checkbox" class="custom-control-input validation" id="customCheck'.$value->id_comision.'" name="iniciativas[]" value="'.$value->infolej.'">
+										<input type="checkbox" class="custom-control-input validation" id="customCheck'.$value->infolej.'" name="iniciativas[]" value="'.$value->infolej.'">
 										<label class="custom-control-label" for="customCheck'.$value->infolej.'"> '.$value->nombre_iniciativa.'</label>
 									</div>';
 								}
@@ -358,7 +366,6 @@
 	</div>
 
 	<!-- Modal comentar iniciativa  -->
-	
 	<div class="modal fade modal-comentar" id="modal-comentar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -369,6 +376,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
+					<!--formulario para comentar iniciativas-->
 					<form class="form-comentar" id="form-comentar">
 						{{ csrf_field() }}
 						<div class="p-2">
@@ -447,48 +455,55 @@
 		var SITEURL = '{{URL::to('')}}'; 
 		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-		$('body').off('click',"#button_ver_video");
-		$('body').on('click', '#button_ver_video', function () {
-			//alert("hey");
-			if($(this).attr("idv") != null && $(this).attr("idv") != ""){
+		//Al hacer clic sobre el botón de ver vídeo, lanza el modal
+		$('body').off('click',".button-video");
+		$('body').on('click', '.button-video', function () {
+			
+			if($(this).attr("idv") != null && $(this).attr("idv") != ""){ //Busca si la iniciativa tiene vídeo
 				$("#link_video").attr("src",$(this).attr("idv"));
 				$("#modal-video").modal();
-			}else{
+			}else{ //Si no tiene, lanza un mensaje
 				bootbox.alert("Esta iniciativa no contiene vídeo");
 			}
 			
 		});
 
 
+		//Al hacer clic sobre el botón comentar, lanza el modal
 		$('body').off('click',".button-comentar");
 		$('body').on('click', '.button-comentar', function () {
-			//alert("hey");
+		
 			
-			$("#idi").val($(this).attr("idi"));
-			$("#idp").val($(this).attr("idp"));
-			$("#modal-comentar").modal();
+			$("#idi").val($(this).attr("idi")); //Obtiene los identificadores de la iniciativa
+			$("#idp").val($(this).attr("idp")); //Obtiene los identificadores de la iniciativa
+			$("#modal-comentar").modal(); //Lanza el modal
 			
 			
 		});
 
+		//Cuando el modal de comentar se cierra
 		$('#modal-comentar').off('hidden.bs.modal');
-		$("#modal-comentar").on('hidden.bs.modal', function () {
+		$("#modal-comentar").on('hidden.bs.modal', function () { 
+			//Se formatean los campos
 			$(this).find(".comentarios").val("");
 		});
 
-		/*función que crea un iniciativa*/
+
+		//Acción que se ejecuta al hacer clic en el botón del modal del comentario
 		$('body').off('click',"#enviar_comentario");
 		$('body').on('click', '#enviar_comentario', function () {
-			var idp = $(this).attr("idp");
-			var idi = $(this).attr("idi");
-			
+			var idp = $(this).attr("idp"); //Obtiene el ide principal
+			var idi = $(this).attr("idi"); //Obtiene el infolej
+			//Muestra el preloader como indicativo de que algo está pasando
 			$("#preloader").css("display", "block");
+			//Obtiene el formulario
 			var form = $("#form-comentar")[0];
 			var formulario = new FormData(form);
 
 
 			$.ajax({
 				type: "post",
+				//Desde esta ruta se realiza en el backend la acción de comentar iniciativa
 				url: SITEURL + "/comentar",
 				data:formulario,
 				enctype: 'multipart/form-data',
@@ -497,19 +512,20 @@
 				processData: false,
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: function (data) {
-					if(data.status == "200"){
+					if(data.status == "200"){ //Si la respuesta del backend fue exitosa
+						//Se oculta el modal
 						$("#modal-comentar").modal("hide");
 						$('.modal-backdrop').remove();
-						bootbox.alert({
-							message: "<b>FOLIO: COM"+data["id"]+"</b><br><br><b>¡Comentario enviado con éxito, en espera de que lo aprueben!</b><br>Se ha el enviado a tu correo el acuse de tu comentario, en caso de que no lo encuentres en tu bandeja, búsca dentro de la carpeta de spam.",
+						bootbox.alert({ //Notifica que la acción fue ejecutada con éxito
+							message: "<b>FOLIO: COM"+data.rsp["id"]+"</b><br><br><b>¡Comentario enviado con éxito, en espera de que lo aprueben!</b><br>Se ha el enviado a tu correo el acuse de tu comentario, en caso de que no lo encuentres en tu bandeja, búsca dentro de la carpeta de spam.",
 							callback: function () {
-								setTimeout(function() {
+								setTimeout(function() { //Al confirmar el mensaje, se recarga la página
 									location.reload();
 								},200);
 							}
 						});
 						
-					}else if (data.status == "422"){
+					}else if (data.status == "422"){ //Si hubieron mensajes de error del lado del backend
 						var error = data.msg;
 						var mensaje = "";
 						for (var i in error) {
@@ -526,26 +542,30 @@
 					bootbox.alert("¡Error al enviar el comentario!");
 				},
 				complete: function(){
+					//Independientemente de la respuesta obtenida se cierra el preloader
 					setTimeout(function() {
 						$("#preloader").fadeOut(500);
 					},200);
 				}
 			});
-		
+			
 		});
 
+		//Función que crea una suscripcion en una iniciativa
 		$('body').off('click',"#suscripcion_iniciativas");
 		$('body').on('click', '#suscripcion_iniciativas', function () {
-			var idp = $(this).attr("idp");
-			var idi = $(this).attr("idi");
-			
+			var idp = $(this).attr("idp"); //Obtiene el ide principal
+			var idi = $(this).attr("idi"); //Obtiene el infolej
+			//Muestra el preloader como indicativo de que algo está pasando
 			$("#preloader").css("display", "block");
+			//Obtiene el formulario
 			var form = $("#form-suscripcion")[0];
 			var formulario = new FormData(form);
 
 
 			$.ajax({
 				type: "post",
+				//Desde esta ruta se realiza en el backend la suscripción de las iniciativas
 				url: SITEURL + "/suscripcion_iniciativas",
 				data:formulario,
 				enctype: 'multipart/form-data',
@@ -554,19 +574,20 @@
 				processData: false,
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: function (data) {
-					if(data.status == "200"){
+					if(data.status == "200"){ //Si la respuesta del backend fue exitosa
+						//Se oculta el modal
 						$("#modal-comentar").modal("hide");
 						$('.modal-backdrop').remove();
-						bootbox.alert({
+						bootbox.alert({ //Notifica que la acción fue ejecutada con éxito
 							message: "¡Suscripción realizada con éxito!",
-							callback: function () {
+							callback: function () { //Al confirmar el mensaje, se recarga la página
 								setTimeout(function() {
 									location.reload();
 								},200);
 							}
 						});
 						
-					}else if (data.status == "422"){
+					}else if (data.status == "422"){ //Si hubieron mensajes de error del lado del backend
 						var error = data.msg;
 						var mensaje = "";
 						for (var i in error) {
@@ -583,6 +604,7 @@
 					bootbox.alert("¡Error al solicitar la suscripción!");
 				},
 				complete: function(){
+					//Independientemente de la respuesta obtenida se cierra el preloader
 					setTimeout(function() {
 						$("#preloader").fadeOut(500);
 					},200);
@@ -591,7 +613,7 @@
 			
 		});
 
-
+		//Acción que se ejecuta cuando dan clic en suscribirse a todas las iniciativas, se marcan todas
 		$("#suscribirme_todas").on("click", function(){
 			if($(this).is(":checked") == true){
 				$("input[name='iniciativas[]']").prop("checked", true);
@@ -600,16 +622,20 @@
 			}
 			
 		});		
+
+		//Acción que se ejecuta cuando se cierra el modal de suscribirse
 		$('#button-suscribe').off('hidden.bs.modal');
 		$("#button-suscribe").on('hidden.bs.modal', function () {
+			//Se formatea el contenido del formulario
 			$(this).find(".validation").val("");
 			$("input[name='comisiones[]']").prop("checked", false);
 		});
 
-
+		//Cuando le da clic en suscribirse, se lanza el modal
 		$("#button-suscribe").on("click", function(){
 			$("#modal-suscribe").modal();
 		});
+		
 		$('[data-toggle="tooltip"]').tooltip()
 
 	});

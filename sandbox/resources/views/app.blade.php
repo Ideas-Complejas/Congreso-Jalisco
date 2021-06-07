@@ -6,7 +6,7 @@
 
 		<title>Congreso Jalisco Abierto</title>
 
-		<!-- styles  -->
+		<!-- styles -->
 		<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 		<link rel="stylesheet" href="{{ asset('css/tablet.css') }}" media="(min-width: 930px)">
 
@@ -19,6 +19,7 @@
 		<link href="{{ asset('DataTables/datatables-full.css') }}" rel="stylesheet">
 	</head>
 	<body>
+		<!--modal para lanzar el buzón-->
 		<div class="modal left fade modal-buzon" id="modal-buzon" tabindex="-1" aria-labelledby="exampleModalLabel"
 		aria-hidden="true">
 			<div class="modal-dialog">
@@ -38,6 +39,7 @@
 								<label for="correo" class="col-form-label">Queja, sugerencia o comentario</label>
 								<textarea type="text" class="form-control validation" minlength="5" rows="5" name="body"></textarea>
 							</div>
+							<!--catcha-->
 							<div class="form-group">
 								<label>Ingrese el código de seguridad</label>
 								
@@ -46,7 +48,7 @@
 							</div>
 							<div class="form-group col-md-12">
 								<div class="row">
-									<label class="p-0 col-md-12 control-label"> <img style="border: 1px solid #D3D0D0" src="captcha.php?rand=<?php echo rand(); ?>" id='captcha'></label>
+									<label class="p-0 col-md-12 control-label"> <img style="border: 1px solid #D3D0D0" src="{{url('/')}}/captcha.php?rand=<?php echo rand(); ?>" id='captcha'></label>
 
 									<div class="p-0 mt-2 col-md-12">
 										<a href="javascript:void(0)" id="reloadCaptcha" style="text-decoration: none; cursor: pointer;"><i class="ml-5 fas fa-redo refresh-captcha"></i>
@@ -54,6 +56,7 @@
 									</div>
 								</div>
 							</div>
+							<!--fin catcha-->
 						
 							
 						</form>
@@ -63,7 +66,7 @@
 				</div>
 			</div>
 		</div>
-
+		<!--diseño preloader-->
 		<div id="preloader">
 			<div id="loader">
 				<div class="spinner-grow color_preloader" role="status">
@@ -92,21 +95,20 @@
 				</div>
 			</div>
 		</div>
+		<!--manda a llamar al view del navbar-->
+		@include('navbar')
 		
-			@include('navbar')
-		
-
+		<!-- manda a llamar todo contenido de página-->
 		@yield('content')
-		<a class='btn-flotante' data-toggle="modal" data-target="#modal-buzon" ><img src="{{asset('icons/mailbox.svg')}}"></i></a>
 
+		<!--botón flotante que al ser presionado lanza modal del buzón-->
+		<a class='btn-flotante' data-toggle="modal" data-target="#modal-buzon" ><img src="{{asset('icons/mailbox.svg')}}"></i></a>
+		<!--llama al view del footer-->
 		@include('footer')
-		@guest
-		@else
-			
-		@endguest
+		
 		
 
-
+		<!--scripts-->
 		<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 		<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -116,11 +118,12 @@
 		<script src="{{ asset('DataTables/datatables-full.js') }}" defer></script>
 		<script src="{{ asset('DataTables/js/vfs_fonts.js') }}" defer></script>
 		<script src="{{ asset('js/jquery.expander.js') }}" defer></script>
+
 		<script type="text/javascript">
 			$(document).ready(function(){
 				var SITEURL = '{{URL::to('')}}'; 
 				var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-				//Función que crea una suscripcion en una iniciativa
+				//Función que manda el correo cuando se confirma en el modal del buzón
 				$('body').off('click',"#send_buzon");
 				$('body').on('click', '#send_buzon', function () {
 					var idp = $(this).attr("idp");
@@ -128,7 +131,6 @@
 					
 					$("#preloader").css("display", "block");
 					var formulario = $("#form_buzon").serialize();
-
 
 					$.ajax({
 						type: "post",
@@ -173,6 +175,8 @@
 					
 				});
 			});
+
+			//Función que se ejecuta al dar clic en renovar el captcha
 			$("#reloadCaptcha").click(function(){
 	  			var captchaImage = $('#captcha').attr('src');
 	  			captchaImage = captchaImage.substring(0,captchaImage.lastIndexOf("?"));
@@ -180,6 +184,7 @@
 	  			$('#captcha').attr('src', captchaImage);
 	  		});
 		</script>
+		<!--en caso de que cada view de página contenga scripts aquí los anexa-->
 		@yield('scripts')
 	</body>
 </html>

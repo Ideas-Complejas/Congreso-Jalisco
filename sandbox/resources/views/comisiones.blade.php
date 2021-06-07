@@ -1,7 +1,7 @@
 @extends('app')
-
 @section('content')
 
+<!--contenido de la portada de comisiones-->
 <div class="header--container">
 	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
@@ -16,12 +16,8 @@
 		</div>
 	</div>
 </div>
-<div class="search-bar-area mt-5">
-	<div class="container--search-bar">
-		
-	</div>
-</div>
-<section class="container-seccion container-table--iniciativas">
+<!--sección de las iniciativas-->
+<section class="container-seccion container-table--iniciativas mt-5">
 	<div class="row mb-4">
 		<div class="col-md-6">
 			<div class="nav-tabs-iniciativas">
@@ -34,6 +30,7 @@
 				</ul>
 			</div>
 		</div>
+		<!--apartado para suscribirse-->
 		<div class="col-md-6 d-flex justify-content-end align-items-center">
 			
 			<button type="button" class="button-suscribe"  data-toggle="tooltip" data-placement="top" title="Suscríbete" id="button-suscribe">
@@ -41,11 +38,11 @@
 			</button>
 		</div>
 	</div>
-
+	<!--comisiones en cards-->
 	<div class="tab-content" id="pills-tabContent">
 		<div class="tab-pane fade show active" id="tab-card" role="tabpanel" aria-labelledby="pills-home-tab">
 
-			<?php if($comisiones){
+			<?php if($comisiones){ //si existen comisiones
 				$contador = 0;
 				$contador_imagenes = 0;
 				foreach ($comisiones as $key => $value) {
@@ -56,12 +53,12 @@
 						<div class="card iniciativas-card--container">
 							<?php
 
-							if($value->url_imagen != null && $value->url_imagen != ""){
-								if(\File::exists(public_path()."/".$value->url_imagen)){
+							if($value->url_imagen != null && $value->url_imagen != ""){ //Si la comisión tiene una imagen
+								if(\File::exists(public_path()."/".$value->url_imagen)){ // y además la imagen existe
 
-									$url = str_replace(" ", "%20", asset($value->url_imagen));
+									$url = str_replace(" ", "%20", asset($value->url_imagen)); // se toma esta imagen
 									$array_imagenes_utilizadas[] = $url;
-								}else{
+								}else{ // de lo contrario busca una random
 									$url = str_replace(" ", "%20", asset($imagenes_random[$contador_imagenes]["url_imagen"]));
 									if($contador_imagenes == (count($imagenes_random)-1)){
 										$contador_imagenes = 0;
@@ -72,7 +69,7 @@
 									}
 									$contador_imagenes++;
 								}
-							}else{
+							}else{ //En caso de que la comisión no tenga imagen, busca una random
 							
 								$url = str_replace(" ", "%20", asset($imagenes_random[$contador_imagenes]["url_imagen"]));
 								if($contador_imagenes == (count($imagenes_random)-1)){
@@ -93,12 +90,10 @@
 								<h5 class="title-card--comision">{{$value->nombre_comision}}</h5>
 								<div class="mb-4 mt-4">
 									<p class="subtitle-card--iniciativa">Iniciativas</p>
-									<?php if($value->iniciativas){
-										
+									<?php if($value->iniciativas){ //Mustra cuantas iniciativas tiene esa comisión
 										echo count($value->iniciativas)." Iniciativa(s)";
 									}?>
 								</div>
-
 
 							</div>
 							<div class="card-footer bg-transparent footer-card--iniciativa">
@@ -112,48 +107,20 @@
 					</div>
 					<?php 
 					$contador ++;
-					if($contador%3 == 0){
+					if($contador%3 == 0){ //Esto se hace para cerrar el contenedor row a 3 iniciativas por fila
 						echo '</div>';
 						$contador = 0;
 					}
 				}
-				 if(count($comisiones)%3 != 0){
+				if(count($comisiones)%3 != 0){ 
 					echo '</div>';
 				}
 			}?>
 		</div>
-		<div class="tab-pane fade" id="tab-list" role="tabpanel" aria-labelledby="pills-profile-tab">
-
-			<!-- vista lista -->
-			<?php if($comisiones){
-				$contador = 0;
-				foreach ($comisiones as $key => $value) {?>
-
-					<div class="border-top"></div>
-					<div class="row mb-4">
-						<div class="col-md-2">
-							<div class="fecha-list-iniciativa--container">
-								<p class="fecha-number mb-1"><?php echo count($value->iniciativas);?></p>
-								<p>Iniciativas</p>
-							</div>
-						</div>
-						<div class="col-md-10">
-							<h5 class="title-card--comision-lista">{{$value->nombre_comision}}</h5>
-							
-							<a target="_blank" href="{{ url('iniciativas') }}/{{$value->nombre_comision}}" class="button-detalle">ver detalle<i
-								class="fas fa-chevron-right"></i>
-							</a>
-						</div>
-					</div>
-						
-					
-
-				<?php }
-			}?>
-		</div>
+		
 	</div>
 
-		<!-- Modal suscribete notificaciones -->
+	<!-- Modal suscribete notificaciones por comisión-->
 	<div class="modal right fade modal-suscribe" id="modal-suscribe" tabindex="-1" aria-labelledby="exampleModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog">
@@ -180,7 +147,7 @@
 						</div>
 						<p class="title-select--input">Elije las comisiones de las que deseas quieres recibir
 						notificaciones</p>
-						<?php if($comisiones){
+						<?php if($comisiones){ //Muestra todas las comisiones que existen
 							echo '<div class="mt-3">';
 							foreach ($comisiones as $key => $value) {
 								echo '<div class="custom-control custom-checkbox checkbox-iniciativa">
@@ -219,82 +186,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-	<!-- Modal comentar iniciativa  -->
-	<div class="modal fade modal-comentar" id="modal-comentar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title ml-3" id="exampleModalLabel">Envíanos tu comentario</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form class="form-comentar">
-						<div class="p-2">
-							<div class="form-group">
-								<label for="formGroupExampleInput">Nombre</label>
-								<input type="text" class="form-control" id="formGroupExampleInput">
-							</div>
-							<div class="form-group">
-								<label for="exampleInputEmail1">Correo electrónico</label>
-								<input type="email" class="form-control" id="exampleInputEmail1"
-								aria-describedby="emailHelp">
-							</div>
-							<div class="form-group">
-								<label for="exampleFormControlTextarea1">Comentario</label>
-								<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-							</div>
-							<div class="form-group">
-								<label for="exampleFormControlFile1">Adjuntar</label>
-								<input type="file" class="form-control-file" id="exampleFormControlFile1">
-							</div>
-							<div class="mt-4">
-								<div class="form-group">
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox" id="gridCheck">
-										<label class="form-check-label" for="gridCheck">
-											He leído y acepto el Aviso de privacidad
-										</label>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox" id="gridCheck">
-										<label class="form-check-label" for="gridCheck">
-											No soy un robot
-										</label>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn-cancelar" data-dismiss="modal">CANCELAR</button>
-					<button type="submit" class="btn-comentar">ENVIAR COMENTARIO</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-		<!-- Modal video iniciativa -->
-	<div class="modal fade" id="modal-video" data-backdrop="static" data-keyboard="false" tabindex="-1"
-		aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content modal-video">
-				<div class="modal-body">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<div class="embed-responsive embed-responsive-16by9">
-						<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/SZzNImTo6RQ"
-						allowfullscreen></iframe>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	</div>	
 
 </section>
 
@@ -306,11 +198,11 @@
 
 		var SITEURL = '{{URL::to('')}}'; 
 		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
 		//Función que crea una suscripcion en una iniciativa
 		$('body').off('click',"#suscripcion_comisiones");
 		$('body').on('click', '#suscripcion_comisiones', function () {
-			var idp = $(this).attr("idp");
-			var idi = $(this).attr("idi");
+
 			
 			$("#preloader").css("display", "block");
 			var form = $("#form-suscripcion")[0];
@@ -328,18 +220,19 @@
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: function (data) {
 					if(data.status == "200"){
-						$("#modal-comentar").modal("hide");
+						$("#modal-suscribe").modal("hide"); //Oculta el modal de la suscripción
 						$('.modal-backdrop').remove();
+						//Lanza mensaje de que la suscripción se realizó con éxito
 						bootbox.alert({
 							message: "¡Suscripción realizada con éxito!",
 							callback: function () {
-								setTimeout(function() {
+								setTimeout(function() { //Recarga la página cuando el usuario confirma el mensaje
 									location.reload();
 								},200);
 							}
 						});
 						
-					}else if (data.status == "422"){
+					}else if (data.status == "422"){ //En caso de que de error, recorre el array que viene desde el backend y muestra al usuario
 						var error = data.msg;
 						var mensaje = "";
 						for (var i in error) {
@@ -364,7 +257,7 @@
 			
 		});
 
-
+		//Cuando le das clic en el botón de suscribirse a todas, se marcan todas las casillas de las comisiones
 		$("#suscribirme_todas").on("click", function(){
 			if($(this).is(":checked") == true){
 				$("input[name='comisiones[]']").prop("checked", true);
@@ -373,16 +266,19 @@
 			}
 			
 		});		
+
+		//Cuando se cierra el modal de la suscripción se setea el formulario
 		$('#button-suscribe').off('hidden.bs.modal');
 		$("#button-suscribe").on('hidden.bs.modal', function () {
 			$(this).find(".validation").val("");
 			$("input[name='comisiones[]']").prop("checked", false);
 		});
 
-
+		//Cuando se presiona el botón de suscríbete, se lanza el modal
 		$("#button-suscribe").on("click", function(){
 			$("#modal-suscribe").modal();
 		});
+
 		$('[data-toggle="tooltip"]').tooltip()
 	});
 </script>

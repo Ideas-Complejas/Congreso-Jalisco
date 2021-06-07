@@ -1,3 +1,4 @@
+<!--contenido del footer-->
 <footer class="mt-4">
 	<div class="container">
 		<div class="row">
@@ -12,6 +13,7 @@
 			<div class="col-md-3">
 				<a href="https://www.congresojal.gob.mx/?q=aviso_privacidad" target="_blank" style="color: white;">Aviso de privacidad</a>
 			</div>
+			<!--Al hacer clic lanzará la ventana para solicitar los datos del buzón-->
 			<div class="col-md-3">
 				<a data-toggle="modal" data-target="#modal-buzon" style="color: white;cursor: pointer;">Buzón de quejas, sugerencias y comentarios</a>
 			</div>

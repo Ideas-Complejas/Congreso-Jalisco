@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
+<!--contenido de la portada de congreso-->
 <div class="header--container">
 	<div class="header-img-container" style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
@@ -13,7 +13,7 @@
 		</div>
 	</div>
 </div>
-
+<!--sección de las infografías-->
 <section class="bg-color-light">
 	<div class="container container--infografia">
 		<h3 class="title--infografia">EL PROCESO LEGISLATIVO</h3>
@@ -29,7 +29,7 @@
 					<h6 class="numero-infografia">O1</h6>
 					<h5 class="title-paso-infografia">PRESENTACION DE LA INICIATIVA</h5>
 					<p class="text-infografia">Una iniciativa es una propuesta que busca atender una necesidad de la
-						sociedad</p>
+					sociedad</p>
 				</div>
 				<div class="content-text-presentacion" data-aos="fade-up" data-aos-delay="100">
 					<h5 class="title-paso-infografia">¿QUIÉN PUEDE PRESENTARLA?</h5>
@@ -48,7 +48,7 @@
 					<h6 class="numero-infografia">O2</h6>
 					<h5 class="title-paso-infografia">DISCUSIÓN</h5>
 					<p class="text-infografia">En esta etapa, una comisión de diputados revisa su viabilidad, elaborando
-						un dictamen donde proponen al pleno del congreso su aprobación.</p>
+					un dictamen donde proponen al pleno del congreso su aprobación.</p>
 				</div>
 				<div class="content-text-discusion" data-aos="fade-up" data-aos-delay="200">
 					
@@ -56,7 +56,7 @@
 					<ul style="width: 80%;">
 						<li class="text-infografia">Aprobar la iniciativa tal y como se planteó de un inicio</li>
 						<li class="text-infografia">Aprobar la iniciativa con algunas modificaciones, o desechar la
-							iniciativa</li>
+						iniciativa</li>
 					</ul>
 				</div>
 			</div>
@@ -79,12 +79,12 @@
 					<h6 class="numero-infografia">O3</h6>
 					<h5 class="title-paso-infografia">APROBACIÓN</h5>
 					<p class="text-infografia">Presentando el dictamen al pleno del congreso, los diputados abren la
-						discusión, algunos se expresan a favor y otros en contra.</p>
+					discusión, algunos se expresan a favor y otros en contra.</p>
 				</div>
 				<div class="content-text-aprobacion" data-aos="fade-up" data-aos-delay="300">
 					
 					<p class="text-infografia">Agotada la discusión, se pone a votación la propuesta. El sentido del
-						voto puede ser a favor, en contra o en abstención.</p>
+					voto puede ser a favor, en contra o en abstención.</p>
 				</div>
 			</div>
 		</div>
@@ -94,13 +94,13 @@
 					<h6 class="numero-infografia">O4</h6>
 					<h5 class="title-paso-infografia">SANCIÓN</h5>
 					<p class="text-infografia">Aquí el Gobernador del estado puede hacer observaciones sobre la
-						Constitución o la viabilidad económica u operativa, entre otras.</p>
+					Constitución o la viabilidad económica u operativa, entre otras.</p>
 				</div>
 				<div class="content-text-sancion" data-aos="fade-up" data-aos-delay="300">
 					<p class="text-infografia">Si existen observaciones se regresa al Congreso la minuta de ley o de
 						decreto (hasta en una ocasión) para estudiar y resolver dichas observaciones.
 						Si el Congreso insiste en su propuesta original, el Gobernador del estado debe promulgar la ley
-						o decreto.</p>
+					o decreto.</p>
 				</div>
 			</div>
 			<div class="col-md-6 col-lg-2 infografia-img--container">
@@ -146,36 +146,38 @@
 	</div>
 </section>
 
+<!-- sección donde se obtienen las terminologías-->
 <section class="container-seccion container-terminologia">
 	<h3 class="title--terminologia pb-3">Terminología Legislativa</h3>
 
 	<ul class="nav nav-pills tab-terminologia" id="pills-tab" role="tablist">
 		
 		<?php
-		for ($i=65;$i<=90;$i++) {
+		for ($i=65;$i<=90;$i++) { //Se usa el for para poder obtener el abecedario
 			$active = "";
 			$selected = "false";
-			if($i == ord($letra)){
+			if($i == ord($letra)){ //El valor de letra es A, por eso, por default aparece seleccionado la letra A
 				$active = "active";
 				$selected="true";
 			}?>   
-		 <li class="nav-item" role="presentation">
-			<a class="nav-link {{$active}}" id="{{chr($i)}}-cards-tab" data-toggle="pill" href="#{{chr($i)}}-cards" role="tab"
+			<!--Con el siguiente código dibuja las pestañas-->
+			<li class="nav-item" role="presentation">
+				<a class="nav-link {{$active}}" id="{{chr($i)}}-cards-tab" data-toggle="pill" href="#{{chr($i)}}-cards" role="tab"
 				aria-controls="pills-{{chr($i)}}" aria-selected="{{$selected}}">{{chr($i)}}</a>
-		</li>         
-						 
+			</li>
+
 		<?php }?>
-	   
+
 	</ul>
 	<div class="tab-content" id="pills-tabContent">
-	   
-	   
+
+
 		<?php
 
-		for ($i=65;$i<=90;$i++) {
+		for ($i=65;$i<=90;$i++) {//Se usa el for para poder obtener el abecedario
 			$active = "";
 			$selected = "false";
-			if($i == ord($letra)){?>
+			if($i == ord($letra)){ //El valor de letra es A, por eso, por default aparece seleccionado la letra A, lo que hace es mostrar el contenido de la pestaña A?>
 				<div class="tab-pane fade active show" id="{{chr($i)}}-cards" role="tabpanel" aria-labelledby="pills-{{chr($i)}}-tab">
 					<div class="row">
 						<?php 
@@ -195,23 +197,23 @@
 								
 							<?php }
 						}else{
-							 echo '<div class="col-lg-3 col-md-6 mb-4">
-									<div class="card card-terminologia--content">
-										<div class="card-body">
-											<h5 class="title-card-terminologia">Sin términos</h5>
-											
-										</div>
-									</div>
-								</div>';
+							echo '<div class="col-lg-3 col-md-6 mb-4">
+							<div class="card card-terminologia--content">
+							<div class="card-body">
+							<h5 class="title-card-terminologia">Sin términos</h5>
+
+							</div>
+							</div>
+							</div>';
 						}?>
 					</div>
 				</div>
-			<?php }else{?>
-			 <div class="tab-pane fade" id="{{chr($i)}}-cards" role="tabpanel" aria-labelledby="pills-{{chr($i)}}-tab">
-				  <div class="row">
+			<?php }else{ // y en esta parte, añade el contenido de las demás pestañas pero están desactivadas, hasta que el usuario seleccione la pestaña?>
+				<div class="tab-pane fade" id="{{chr($i)}}-cards" role="tabpanel" aria-labelledby="pills-{{chr($i)}}-tab">
+					<div class="row">
 						<?php 
 						
-						if(isset($terminos[(string)chr($i)]) && count($terminos[(string)chr($i)])> 0){
+						if(isset($terminos[(string)chr($i)]) && count($terminos[(string)chr($i)])> 0){ //Busca en el array la letra actual del for y si esta tiene términos que comiencen con esa letra
 							foreach ($terminos[(string)chr($i)] as $key => $value) {
 								?>
 								
@@ -225,28 +227,25 @@
 								</div>
 								
 							<?php }
-						}else{
+						}else{ //En caso de que no tenga términos que comiencen con esa letra, lo indica
 							echo '<div class="col-lg-3 col-md-6 mb-4">
-									<div class="card card-terminologia--content">
-										<div class="card-body">
-											<h5 class="title-card-terminologia">Sin términos</h5>
-											
-										</div>
-									</div>
-								</div>';
+							<div class="card card-terminologia--content">
+							<div class="card-body">
+							<h5 class="title-card-terminologia">Sin términos</h5>
+							</div>
+							</div>
+							</div>';
 						}?>
 					</div>
-			 </div>
-		   <?php }?>   
+				</div>
+			<?php }?>   
 			
-						 
 		<?php }?>
-
 	</div>
-
 </section>
 
 
+<!--Sección de las preguntas más frecuentes-->
 <section class="container-seccion container--faq">
 	<h3 class="title--terminologia">Preguntas más frecuentes</h3>
 	<div class="accordion" id="accordionExample">
@@ -254,8 +253,8 @@
 			<div class="card-header" id="headingOne">
 				<h2 class="title-faq mb-0">
 					<button class="btn btn-block text-left" type="button" data-toggle="collapse"
-						data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						¿Cómo puedo comentar un asunto que se está discutiendo?
+					data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					¿Cómo puedo comentar un asunto que se está discutiendo?
 					</button>
 				</h2>
 			</div>
@@ -273,8 +272,8 @@
 			<div class="card-header" id="headingTwo">
 				<h2 class="title-faq mb-0">
 					<button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse"
-						data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						¿Qué tipo de archivos puedo adjuntar en mi comentario?
+					data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					¿Qué tipo de archivos puedo adjuntar en mi comentario?
 					</button>
 				</h2>
 			</div>
@@ -288,8 +287,8 @@
 			<div class="card-header" id="headingThree">
 				<h2 class="title-faq mb-0">
 					<button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse"
-						data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-						¿Cómo saber si tomaron en cuenta mis opiniones?
+					data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					¿Cómo saber si tomaron en cuenta mis opiniones?
 					</button>
 				</h2>
 			</div>
@@ -305,8 +304,8 @@
 			<div class="card-header" id="headingFour">
 				<h2 class="title-faq mb-0">
 					<button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse"
-						data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-						¿Cómo puedo ver el documento original que se encuentra en estudio en la comisión?
+					data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					¿Cómo puedo ver el documento original que se encuentra en estudio en la comisión?
 					</button>
 				</h2>
 			</div>
@@ -323,4 +322,3 @@
 
 @endsection
 
-  

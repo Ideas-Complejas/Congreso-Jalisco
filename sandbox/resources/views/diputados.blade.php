@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
+<!--contenido de la portada de diputados-->
 <div class="header--container">
 	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
@@ -13,6 +13,7 @@
 		</div>
 	</div>
 </div>
+<!--sección de los diputados-->
 <section>
 	<div class="container container--title-diputados">
 		<h3 class="title--diputados">Grupos parlamentarios</h3>
@@ -21,16 +22,16 @@
 	</div>
 
 	<div class="container-cards-diputados">
-		<?php if($partidos){
-			foreach ($partidos as $key => $value) {?>
+		<?php if($partidos){ //Si hay partidos
+			foreach ($partidos as $key => $value) { //Se recorre cada uno de ellos?>
 				 <div>
 					<h5 class="title--partido">{{$value->partido}}</h5>
 					<div class="border-line"></div>
 				</div>
-				<?php if($value->diputados){
+				<?php if($value->diputados){ //Si el partido tiene diputados
 
 					echo '<div class="row mb-5">';
-					foreach($partidos[$key]->diputados as $key_d =>$value_d){?>
+					foreach($partidos[$key]->diputados as $key_d =>$value_d){ //Se recorre cada diputado para ser mostrado en card?>
 					   
 						<div class="col-lg-4 col-md-6 mb-3">
 							<div class="card mb-3 card-perfil-diputado" style="max-width: 540px;">
@@ -64,14 +65,9 @@
 					<?php } echo "</div>";
 				}?>
 
-			   
 			<?php }
 		}?>
 		
-		
-
-		
-	   
 	</div>
 </section>
 

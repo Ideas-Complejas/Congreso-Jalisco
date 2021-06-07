@@ -25,31 +25,31 @@
 			</li>
 			@guest
 			@else
-			
-					<li class="nav-item content-user-nav dropdown min_content pr-3">
-						<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-							<span class="nav-user-name">{{ Auth::user()->get_name() }} </span>
-							<span class="caret"></span>
-							<div class="d-inline-block">
-								<i class="far fa-user" style="font-size: 0.8em"></i>
-							</div>
+			<!--si el usuario está logueado se muestran los datos del usuario y la opción de acceder a configuraciones-->
+				<li class="nav-item content-user-nav dropdown min_content pr-3">
+					<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+						<span class="nav-user-name">{{ Auth::user()->get_name() }} </span>
+						<span class="caret"></span>
+						<div class="d-inline-block">
+							<i class="far fa-user" style="font-size: 0.8em"></i>
+						</div>
+					</a>
+
+					<div class="dropdown-menu dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item dropdown_style" href="{{ route('configuraciones') }}">
+						{{ __('Configuraciones') }}
+						</a>
+						<a class="dropdown-item dropdown_style" href="{{ route('logout') }}" onclick="event.preventDefault();
+						document.getElementById('logout-form').submit();">
+						{{ __('Cerrar sesión') }}
 						</a>
 
-						<div class="dropdown-menu dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item dropdown_style" href="{{ route('configuraciones') }}">
-							{{ __('Configuraciones') }}
-							</a>
-							<a class="dropdown-item dropdown_style" href="{{ route('logout') }}" onclick="event.preventDefault();
-							document.getElementById('logout-form').submit();">
-							{{ __('Cerrar sesión') }}
-							</a>
+						<form id="logout-form" class="dropdown_style" action="{{ route('logout') }}" method="POST" style="display: none;" autocomplete="off" autocomplete="nope">
+							@csrf
+						</form>
 
-							<form id="logout-form" class="dropdown_style" action="{{ route('logout') }}" method="POST" style="display: none;" autocomplete="off" autocomplete="nope">
-								@csrf
-							</form>
-
-						</div>
-					</li>
+					</div>
+				</li>
 			@endguest
 		</ul>
 	</div>

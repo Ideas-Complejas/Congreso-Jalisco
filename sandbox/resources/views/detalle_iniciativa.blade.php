@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
+<!--contenido de la portada de detalle_iniciativa-->
 <div class="header--container">
 	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
@@ -13,6 +13,7 @@
 		</div>
 	</div>
 </div>
+<!-- sección del detalle de la iniciativa-->
 <section class="container-seccion">
 	<div class="row mt-5">
 		<div class="col-lg-8 col-md-6">
@@ -30,7 +31,7 @@
 				</div>
 				<div class="mr-2">
 					<p class="subtitle-card--iniciativa">Autor:</p>
-					 <?php if($iniciativa->autores){
+					 <?php if($iniciativa->autores){ //Si la iniciativa tiene autores se van mostrando
 						echo '<ul class="lista-autores-detalle">';
 						foreach ($iniciativa->autores as $key_a => $value_a) {
 
@@ -43,7 +44,7 @@
 				</div>
 			</div>
 			
-			<!-- Tabla de iniciativas  -->
+			<!-- Tabla de estados procesales  -->
 			<div class="container-table-iniciativas col-md-12">
 				<table class="table dataTable table-striped">
 					<thead>
@@ -58,9 +59,9 @@
 							<th scope="col"><i class="fas fa-download"></i></th>
 						</tr>
 					</thead>
-					<?php if($iniciativa->estados_procesales){
+					<?php if($iniciativa->estados_procesales){ //si la iniciativa tiene estados procesales
 						echo '<tbody>';
-						foreach ($iniciativa->estados_procesales as $key => $value) {?>
+						foreach ($iniciativa->estados_procesales as $key => $value) { //Se va recorriendo cada uno para mostrar la información?>
 						   <tr>
 								<th scope="row">{{$value->nombre_tipo}}</th>
 								<td>{{$value->nombre_estado}}</td>
@@ -78,7 +79,6 @@
 				</table>
 			</div>
 
-			<!-- Form enviar comentario  -->
 			<?php 
 			
 			
@@ -86,8 +86,9 @@
 			$fecha_inicial = "";
 			$fecha_final = "";
 			if($iniciativa->comentarios){
+				//Se obtiene el número de comentarios aprobados de la iniciativa
 				$num_comentarios = count($iniciativa->comentarios);
-				
+				//Se define la fecha inicial y final de los comentarios
 				if($num_comentarios > 0){
 					$fecha_inicial = date_format(new DateTime($iniciativa->comentarios[$num_comentarios-1]->fecha_creacion),"d/m/Y");
 					$fecha_final = date_format(new DateTime($iniciativa->comentarios[0]->fecha_creacion),"d/m/Y");
@@ -101,7 +102,7 @@
 					</p>
 					<p class="mb-0"><small class="text-muted"><?php echo $fecha_inicial." - ".$fecha_final; ?></p></small></p>
 				</div>
-				<?php if($iniciativa->comentarios){?>
+				<?php if($iniciativa->comentarios){ //Si la iniciativa tiene comentarios?>
 					<table id="table_comentarios" class="table dataTable table-striped">
 						<thead>
 							<tr>
@@ -113,12 +114,13 @@
 							</tr>
 						</thead>
 						<tbody>
-						<?php foreach ($iniciativa->comentarios as $key => $value) {
+						<?php foreach ($iniciativa->comentarios as $key => $value) { //se va recorriendo cada comentario para ser mostrado
 							echo "<tr>";
 								if($value->usuario_url_file != "" && $value->usuario_url_file != null){
+									//Si el comentario tiene un archivo, se mustra además del folio
 									$url = URL::to('');
 									echo'<td class="text-center">COM'.$value->id.'<br><a href="'.$url.'/get_file_comentario/'.$value["id"].'" target="_blank"><button class="btn btn-purple ver_archivo" ide="'.$value["id"].'"><i class="far fa-file"></i></button></a></td>';
-								}else{
+								}else{ //de lo contrario solo se muestra el folio
 									echo "<td>COM".$value->id."</td>";
 								}
 							echo "<td>".$value->usuario_nombre."</td>";
@@ -131,6 +133,7 @@
 						}?>
 						</tbody>
 					</table>
+					<!--sección para dibujar la paginación de la tabla de los comentarios-->
 					<div class="col-md-12 pt-2 pb-5 pr-0 pl-0">
 						<div class="float-right">
 							{{ $iniciativa->comentarios->links( "pagination::bootstrap-4") }}
@@ -139,6 +142,7 @@
 				<?php }?>
 			</div>
 			<div class="container--comentar-detalle-iniciativa">
+				<!--formulario para comentar una iniciativa-->
 				<form class="form-comentar" id="form-comentar">
 					{{ csrf_field() }}
 					<div class="p-2">
@@ -179,10 +183,11 @@
 						</div>
 					</div>
 				</form>
+				<!--Botón que ejecuta la acción para mandar al backend el formulario-->
 				<button id="enviar_comentario" idi="{{$iniciativa->infolej}}" idp="{{$iniciativa->id_principal}}" class="btn-comentar">ENVIAR COMENTARIO</button>
 			</div>
 		</div>
-		<!-- Cards  -->
+		<!--Información del último status de la iniciativa-->
 		<div class="col-lg-4 col-md-6">
 			<div class="card container-card-detalle-iniciativa">
 				<div class="card-body">
@@ -206,10 +211,12 @@
 							}?>
 						</p>
 					</div>
+					<!--link para consultar en el periódico oficial "El Estado de Jalisco"-->
 					<a href="https://periodicooficial.jalisco.gob.mx/" class="link-consultar-diario">Consultarlo en el periódico oficial "El Estado de Jalisco" <i class="fas fa-chevron-right"></i>
 					</a>
 				</div>
 			</div>
+			<!--si la iniciativa tiene vídeo-->
 			<?php if($iniciativa->url_video != null && $iniciativa->url_video!= "" && $iniciativa->descripcion_video != null && $iniciativa->descripcion_video != ""){?>
 
 			
@@ -229,6 +236,8 @@
 					</div>
 				</div>
 			<?php }?>
+
+			<!--sección para suscribirse-->
 			<div class="card container-card-detalle-iniciativa">
 				<div class="card-body">
 					<div class="text-card-estado-inicitiva">
@@ -269,16 +278,18 @@
 		/*función que crea un comentario en una  iniciativa*/
 		$('body').off('click',"#enviar_comentario");
 		$('body').on('click', '#enviar_comentario', function () {
-			var idp = $(this).attr("idp");
-			var idi = $(this).attr("idi");
-			
+			var idp = $(this).attr("idp"); //Obtiene el ide principal
+			var idi = $(this).attr("idi"); //Obtiene el infolej
+			//Muestra el preloader como indicativo de que algo está pasando
 			$("#preloader").css("display", "block");
+			//Obtiene el formulario
 			var form = $("#form-comentar")[0];
 			var formulario = new FormData(form);
 
 
 			$.ajax({
 				type: "post",
+				//Desde esta ruta se realiza en el backend la acción de comentar iniciativa
 				url: SITEURL + "/comentar",
 				data:formulario,
 				enctype: 'multipart/form-data',
@@ -287,19 +298,20 @@
 				processData: false,
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: function (data) {
-					if(data.status == "200"){
+					if(data.status == "200"){ //Si la respuesta del backend fue exitosa
+						//Se oculta el modal
 						$("#modal-comentar").modal("hide");
 						$('.modal-backdrop').remove();
-						bootbox.alert({
-							message: "<b>FOLIO: COM"+data["id"]+"</b><br><br><b>¡Comentario enviado con éxito, en espera de que lo aprueben!</b><br>Se ha el enviado a tu correo el acuse de tu comentario, en caso de que no lo encuentres en tu bandeja, búsca dentro de la carpeta de spam.",
+						bootbox.alert({ //Notifica que la acción fue ejecutada con éxito
+							message: "<b>FOLIO: COM"+data.rsp["id"]+"</b><br><br><b>¡Comentario enviado con éxito, en espera de que lo aprueben!</b><br>Se ha el enviado a tu correo el acuse de tu comentario, en caso de que no lo encuentres en tu bandeja, búsca dentro de la carpeta de spam.",
 							callback: function () {
-								setTimeout(function() {
+								setTimeout(function() { //Al confirmar el mensaje, se recarga la página
 									location.reload();
 								},200);
 							}
 						});
 						
-					}else if (data.status == "422"){
+					}else if (data.status == "422"){ //Si hubieron mensajes de error del lado del backend
 						var error = data.msg;
 						var mensaje = "";
 						for (var i in error) {
@@ -316,6 +328,7 @@
 					bootbox.alert("¡Error al enviar el comentario!");
 				},
 				complete: function(){
+					//Independientemente de la respuesta obtenida se cierra el preloader
 					setTimeout(function() {
 						$("#preloader").fadeOut(500);
 					},200);
@@ -327,16 +340,18 @@
 		//Función que crea una suscripcion en una iniciativa
 		$('body').off('click',"#suscripcion");
 		$('body').on('click', '#suscripcion', function () {
-			var idp = $(this).attr("idp");
-			var idi = $(this).attr("idi");
-			
+			var idp = $(this).attr("idp"); //Obtiene el ide principal
+			var idi = $(this).attr("idi"); //Obtiene el infolej
+			//Muestra el preloader como indicativo de que algo está pasando
 			$("#preloader").css("display", "block");
+			//Obtiene el formulario
 			var form = $("#form-suscripcion")[0];
 			var formulario = new FormData(form);
 
 
 			$.ajax({
 				type: "post",
+				//Desde esta ruta se realiza en el backend la suscripción de la iniciativa
 				url: SITEURL + "/suscripcion",
 				data:formulario,
 				enctype: 'multipart/form-data',
@@ -345,19 +360,20 @@
 				processData: false,
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: function (data) {
-					if(data.status == "200"){
+					if(data.status == "200"){ //Si la respuesta del backend fue exitosa
+						//Se oculta el modal
 						$("#modal-comentar").modal("hide");
 						$('.modal-backdrop').remove();
-						bootbox.alert({
+						bootbox.alert({ //Notifica que la acción fue ejecutada con éxito
 							message: "¡Suscripción realizada con éxito!",
-							callback: function () {
+							callback: function () {  //Al confirmar el mensaje, se recarga la página
 								setTimeout(function() {
 									location.reload();
 								},200);
 							}
 						});
 						
-					}else if (data.status == "422"){
+					}else if (data.status == "422"){ //Si hubieron mensajes de error del lado del backend
 						var error = data.msg;
 						var mensaje = "";
 						for (var i in error) {
@@ -374,7 +390,8 @@
 					bootbox.alert("¡Error al solicitar la suscripción!");
 				},
 				complete: function(){
-					setTimeout(function() {
+					//Independientemente de la respuesta obtenida se cierra el preloader
+					setTimeout(function() { 
 						$("#preloader").fadeOut(500);
 					},200);
 				}
@@ -382,6 +399,7 @@
 			
 		});
 
+		//Esto se pone para poder ocultar o mostrar los comentarios extensos
 		//$('#table_comentarios').DataTable().on("draw", function(){
 		   $('.expandable p').expander({
 			  slicePoint: 50, // si eliminamos por defecto es 100 caracteres

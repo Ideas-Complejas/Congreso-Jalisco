@@ -17,6 +17,7 @@ class ComentarioComision extends Notification
      *
      * @return void
      */
+    //Recibe las variables del Controlador
     public function __construct($data, $iniciativa,$folio)
     {
         $this->data = $data;
@@ -43,7 +44,7 @@ class ComentarioComision extends Notification
      */
     public function toMail($notifiable)
     {
-        
+        //Hace el envío del mensaje, pasando al view las variables
         return (new MailMessage)
         ->subject('Nuevo Comentario, Congreso Jalisco')
         ->view(

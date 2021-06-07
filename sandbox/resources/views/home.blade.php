@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-
+<!--contenido de la portada del home-->
 <div class="header--container">
 	<div class="header-img-container"  style="background-image: url('{{asset('img/portada.png')}}');">
 		<div class="container h-100">
@@ -9,7 +9,7 @@
 				<div class=" col-md-8 header-text-content">
 					<h1 class="title--header">Congreso Jalisco Abierto</h1>
 					<button type="button" class="button-video-tutorial" data-toggle="modal" data-target="#modal-video-tutorial">
-						<span class="icon-play"></span>Ver video tutorial
+						<span class="icon-play"></span>Ver vídeo tutorial
 					</button>
 					
 				</div>
@@ -30,6 +30,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
+				<!--formulario que se usa para comentar una iniciativa-->
 				<form class="form-comentar" id="form-comentar">
 					{{ csrf_field() }}
 					<div class="p-2">
@@ -182,7 +183,7 @@
 	<div class="container congreso--container">
 		<div class="row">
 			<div class="col-md-6 col-sm-12">
-				<h3 class="title--congreso line-border-bottom">¿Qué es Congreso Jalisco abierto?</h3>
+				<h3 class="title--congreso line-border-bottom">¿Qué es Congreso Jalisco Abierto?</h3>
 				<div class="text--congreso text-justify">
 					<p>Es una Plataforma digital creada para fomentar la participación ciudadana en el proceso de
 						creación de leyes y donde podrás conocer todo el actuar del Poder Legislativo.</p>
@@ -268,24 +269,25 @@
 					<i class="fas fa-chevron-right"></i></a>
 			</div>
 		</div>
-		<?php if($iniciativas){
+		<?php if($iniciativas){ //Si existen las iniciativas
 			$contador = 0;
 			$contador_imagenes = 0;
 			$cantidad_imagenes_aleatorias = count($imagenes_random);
-			foreach ($iniciativas as $key => $value) {
-				if($contador == 0){
+			foreach ($iniciativas as $key => $value) { //Recorre cada iniciativa
+				if($contador == 0){ //Esto se hace para definir una fila
 					echo '<div class="row mb-3">';
 				}?>
+				<!--card de iniciativa-->
 				<div class="col-lg-4 col-md-4 col-sm-12 mb-3">
 					<div class="card iniciativas-card--container">
 						<?php
 						
-						if($value->url_imagen != null && $value->url_imagen != ""){
-							if(\File::exists(public_path()."/".$value->url_imagen)){
+						if($value->url_imagen != null && $value->url_imagen != ""){ //Si la iniciativa no tiene imagen
+							if(\File::exists(public_path()."/".$value->url_imagen)){ //Si existe la imagen, toma la imagen
 
 								$url = str_replace(" ", "%20", asset($value->url_imagen));
 								$array_imagenes_utilizadas[] = $url;
-							}else{
+							}else{ //si no, busca una random
 								$url = str_replace(" ", "%20", asset($imagenes_random[$contador_imagenes]["url_imagen"]));
 								if($contador_imagenes == (count($imagenes_random)-1)){
 									$contador_imagenes = 0;
@@ -296,7 +298,7 @@
 								}
 								$contador_imagenes++;
 							}
-						}else{
+						}else{ //si no, busca una random
 						
 							$url = str_replace(" ", "%20", asset($imagenes_random[$contador_imagenes]["url_imagen"]));
 							if($contador_imagenes == (count($imagenes_random)-1)){
@@ -318,9 +320,9 @@
 							echo strftime("%B %d, %Y",strtotime($value->fecha_inicial));
 						?></p>
 							<h5 class="title-card--iniciativa">
-								<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){
+								<?php if($value->nombre_iniciativa != null && $value->nombre_iniciativa != ""){ //Si la iniciativa tiene nombre
 									echo $value->nombre_iniciativa;
-								}else{
+								}else{ //Si no, pone default Iniciativa
 									echo "Iniciativa";
 								}?>
 							</h5>
@@ -331,9 +333,9 @@
 							</div>
 							<div class="mb-5">
 								<p class="subtitle-card--iniciativa">Autor(es):</p>
-								<?php if($value->autores){
+								<?php if($value->autores){ //Si hay autores
 									echo '<ul class="lista-autores">';
-									foreach ($value->autores as $key_a => $value_a) {
+									foreach ($value->autores as $key_a => $value_a) { //Los va mostrando
 										if($key_a < 3){
 											
 											echo '<li><span>'.$value_a->nombre_remitente.'</span></li>';
@@ -348,11 +350,11 @@
 							$num_comentarios = 0;
 							$fecha_inicial = "";
 							$fecha_final = "";
-							if($value->comentarios){
+							if($value->comentarios){ //Si hay comentarios
 								$num_comentarios = count($value->comentarios);
 								
 								if($num_comentarios > 0){
-
+									//Define la fecha inicial y final de los comentarios
 									$fecha_inicial = date_format(new DateTime($value->comentarios[0]->fecha_creacion),"d/m/Y");
 									$fecha_final = date_format(new DateTime($value->comentarios[$num_comentarios-1]->fecha_creacion),"d/m/Y");
 								}
@@ -365,15 +367,16 @@
 						</div>
 						<div class="card-footer bg-transparent footer-card--iniciativa">
 							<div class="call-card--iniciativa">
+								<!--botón para lanzar el modal de comentar iniciativa-->
 								<button type="button" class="button-comentar" idp="{{$value->id_principal}}" idi="{{$value->infolej}}">
 									<span class="icon-card comentar"></span>
 									Comentar
 								</button>
-
+								<!--botón para ver el vídeo de la iniciativa-->
 								<button type="button" class="button-video" id="button_ver_video" idv='{{$value->url_video}}'>
-									<span class="icon-card video"></span>Ver video
+									<span class="icon-card video"></span>Ver vídeo
 								</button>
-
+								<!--botón para mandar a ver detalle de la iniciativa-->
 								<a target="_blank" href="{{ url('detalle_iniciativa') }}/{{$value->infolej}}/{{$value->id_principal}}" class="button-detalle">ver detalle<i
 										class="fas fa-chevron-right"></i></a>
 							</div>
@@ -382,7 +385,7 @@
 				</div>
 			<?php 
 				$contador ++;
-				if($contador%3 == 0){
+				if($contador%3 == 0){ //Esto se hace para cerrar una fila
 					echo '</div>';
 					$contador = 0;
 				}
@@ -408,6 +411,7 @@
 			</div>
 		</div>
 	</div>
+
 </section>
 
 <!-- Canal parlamento  -->
@@ -425,10 +429,10 @@
 			</div>
 		</div>
 
-		<?php if(isset($videoyoutube)){
+		<?php if(isset($videoyoutube)){ //Si hay vídeos para el home
 			echo "<div class='row'>";
-			foreach ($videoyoutube as $key => $value) {
-				if($key == 0){?>
+			foreach ($videoyoutube as $key => $value) { //Recorre cada uno
+				if($key == 0){ //El primer vídeo lo muestra en grande de lado izquierdo?>
 
 					<div class="col-md-6">
 						<div>
@@ -481,48 +485,53 @@
 		var SITEURL = '{{URL::to('')}}'; 
 		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-		$('body').off('click',"#button_ver_video");
-		$('body').on('click', '#button_ver_video', function () {
+		//Al hacer clic sobre el botón de ver vídeo, lanza el modal
+		$('body').off('click',".button-video");
+		$('body').on('click', '.button-video', function () {
 			
-			if($(this).attr("idv") != null && $(this).attr("idv") != ""){
+			if($(this).attr("idv") != null && $(this).attr("idv") != ""){ //Busca si la iniciativa tiene vídeo
 				$("#link_video").attr("src",$(this).attr("idv"));
 				$("#modal-video").modal();
-			}else{
+			}else{ //Si no tiene, lanza un mensaje
 				bootbox.alert("Esta iniciativa no contiene vídeo");
 			}
 			
 		});
 
-
+		//Al hacer clic sobre el botón comentar, lanza el modal
 		$('body').off('click',".button-comentar");
 		$('body').on('click', '.button-comentar', function () {
 		
 			
-			$("#idi").val($(this).attr("idi"));
-			$("#idp").val($(this).attr("idp"));
-			$("#modal-comentar").modal();
+			$("#idi").val($(this).attr("idi")); //Obtiene los identificadores de la iniciativa
+			$("#idp").val($(this).attr("idp")); //Obtiene los identificadores de la iniciativa
+			$("#modal-comentar").modal(); //Lanza el modal
 			
 			
 		});
 
+		//Cuando el modal de comentar se cierra
 		$('#modal-comentar').off('hidden.bs.modal');
-		$("#modal-comentar").on('hidden.bs.modal', function () {
+		$("#modal-comentar").on('hidden.bs.modal', function () { 
+			//Se formatean los campos
 			$(this).find(".comentarios").val("");
 		});
 
-		/*función que crea un iniciativa*/
+		//Acción que se ejecuta al hacer clic en el botón del modal del comentario
 		$('body').off('click',"#enviar_comentario");
 		$('body').on('click', '#enviar_comentario', function () {
-			var idp = $(this).attr("idp");
-			var idi = $(this).attr("idi");
-			
+			var idp = $(this).attr("idp"); //Obtiene el ide principal
+			var idi = $(this).attr("idi"); //Obtiene el infolej
+			//Muestra el preloader como indicativo de que algo está pasando
 			$("#preloader").css("display", "block");
+			//Obtiene el formulario
 			var form = $("#form-comentar")[0];
 			var formulario = new FormData(form);
 
 
 			$.ajax({
 				type: "post",
+				//Desde esta ruta se realiza en el backend la acción de comentar iniciativa
 				url: SITEURL + "/comentar",
 				data:formulario,
 				enctype: 'multipart/form-data',
@@ -531,19 +540,20 @@
 				processData: false,
 				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
 				success: function (data) {
-					if(data.status == "200"){
+					if(data.status == "200"){ //Si la respuesta del backend fue exitosa
+						//Se oculta el modal
 						$("#modal-comentar").modal("hide");
 						$('.modal-backdrop').remove();
-						bootbox.alert({
-							message: "<b>FOLIO: COM"+data["id"]+"</b><br><br><b>¡Comentario enviado con éxito, en espera de que lo aprueben!</b><br>Se ha el enviado a tu correo el acuse de tu comentario, en caso de que no lo encuentres en tu bandeja, búsca dentro de la carpeta de spam.",
+						bootbox.alert({ //Notifica que la acción fue ejecutada con éxito
+							message: "<b>FOLIO: COM"+data.rsp["id"]+"</b><br><br><b>¡Comentario enviado con éxito, en espera de que lo aprueben!</b><br>Se ha el enviado a tu correo el acuse de tu comentario, en caso de que no lo encuentres en tu bandeja, búsca dentro de la carpeta de spam.",
 							callback: function () {
-								setTimeout(function() {
+								setTimeout(function() { //Al confirmar el mensaje, se recarga la página
 									location.reload();
 								},200);
 							}
 						});
 						
-					}else if (data.status == "422"){
+					}else if (data.status == "422"){ //Si hubieron mensajes de error del lado del backend
 						var error = data.msg;
 						var mensaje = "";
 						for (var i in error) {
@@ -560,6 +570,7 @@
 					bootbox.alert("¡Error al enviar el comentario!");
 				},
 				complete: function(){
+					//Independientemente de la respuesta obtenida se cierra el preloader
 					setTimeout(function() {
 						$("#preloader").fadeOut(500);
 					},200);
@@ -569,6 +580,7 @@
 		});
 	});
 </script>
+<!--si existe la variable notificación, se ejecuta lo siguiente-->
 @if (session('notification'))
 <script>
 	$(document).ready(function () {

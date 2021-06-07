@@ -18,6 +18,7 @@ class Buzon extends Notification
 	 *
 	 * @return void
 	 */
+	//Recibe las variables del Controlador
 	public function __construct($body,$cc)
 	{
 		$this->body = $body;
@@ -30,6 +31,7 @@ class Buzon extends Notification
 	 * @param  mixed  $notifiable
 	 * @return array
 	 */
+
 	public function via($notifiable)
 	{
 		return ['mail'];
@@ -41,11 +43,12 @@ class Buzon extends Notification
 	 * @param  mixed  $notifiable
 	 * @return \Illuminate\Notifications\Messages\MailMessage
 	 */
+
 	public function toMail($notifiable)
 	{
-		
+		//Hace el envío del mensaje, pasando al view las variables
 		return (new MailMessage)
-		->cc($this->cc)
+		->cc($this->cc) //Sirve para mandar una copia
 		->subject('Buzón, Congreso Jalisco')
 		->view(
 			'emails.buzon', ['body' => $this->body]
