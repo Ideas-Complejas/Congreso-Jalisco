@@ -31,7 +31,7 @@
 						<div style="text-align: left; margin-top: 1em">
 							<label style="text-align: left!important"><span style='color:#0277B9; font-weight:bold; font-size: 1.2em'>FOLIO: COM{{$folio}}</span></label>
 							<br>
-							El comentario fue realizado en la iniciativa  
+							El comentario fue realizado en la iniciativa<br>  
 							
 								<?php if($iniciativa->nombre_iniciativa != null && $iniciativa->nombre_iniciativa != ""){
 									echo '<label style="text-align: left!important"><span style="color:#0277B9; font-weight:bold; font-size: 1.2em">'.$iniciativa->nombre_iniciativa.'</span></label>';

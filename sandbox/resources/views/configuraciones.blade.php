@@ -300,6 +300,14 @@
 							<label for="inputAddress">Link</label>
 							<input type="text" class="form-control validation" id="link_dato" name="link" placeholder="">
 						</div>
+						<div class="form-group">
+							<label for="inputAddress">Link licencia</label>
+							<input type="text" class="form-control validation" id="link_licencia" name="link_licencia" placeholder="">
+						</div>
+						<div class="form-group">
+							<label for="inputAddress">Link diccionario de datos</label>
+							<input type="text" class="form-control validation" id="link_diccionario" name="link_diccionario" placeholder="">
+						</div>
 					</div>
 					
 					
@@ -374,7 +382,7 @@
 					</div>
 					<div class="card-body">
 						<!--tabla que es llenada con una función ajax-->
-						<table id="table_usuarios" class="table dataTable table-striped" style="width:100%; height: 20rem">
+						<table id="table_usuarios" class="table dataTable table-striped" style="width:100%;">
 						<thead>
 							<tr>
 								<th scope="col"></th>
@@ -414,7 +422,7 @@
 				</div>
 				<div class="card-body">
 					<!--tabla que es llenada con una función ajax-->
-					<table id="table_videos" class="table dataTable table-striped" style="width:100%; height: 20rem">
+					<table id="table_videos" class="table dataTable table-striped" style="width:100%; ">
 					<thead>
 						<tr>
 						
@@ -450,11 +458,12 @@
 				</div>
 				<div class="card-body">
 					<!--tabla que es llenada con una función ajax-->
-					<table id="table_iniciativas" class="table dataTable table-striped" style="width:100%; height: 20rem">
+					<table id="table_iniciativas" class="table dataTable table-striped" style="width:100%;">
 					<thead>
 						<tr>
 							
 							<th scope="col" class="">Nombre</th>
+							<th scope="col" class="">Comisiones</th>
 							<th scope="col">Id principal</th>
 							<th scope="col" class="">Infolej</th>
 							<th scope="col" class="">Url Imagen</th>
@@ -475,39 +484,88 @@
 	  
 		
 	</div>
-	<div class="row p-5">
-		<div class="col-md-12">
-			<div class="card card-sombra">
-				<div class="card-header content-card-header">
-					<div class="title-card-header">
-					   <h5>Comentarios</h5>
+	<div class="row" style="padding: 3rem 3.9rem!important;">
+		<nav>
+		  <div class="nav nav-tabs nav-tabs-comentarios" id="nav-tab" role="tablist">
+		    <a class="nav-item nav-link active" id="com-por-aprob-tab" data-toggle="tab" href="#com-por-aprob" role="tab" aria-controls="com-por-aprob" aria-selected="true">Comentarios por aprobar</a>
+		    <a class="nav-item nav-link" id="com-aprobados-tab" data-toggle="tab" href="#com-aprobados" role="tab" aria-controls="com-aprobados" aria-selected="false">Comentarios aprobados</a>
+		     <a  href="{{url('configuraciones/estadisticas')}}" target="_blank" class="ml-5"><button class="btn btn-purple">Ver gráfica</button></a>
+		   
+		  </div>
+
+		</nav>
+		<div class="tab-content w-100" id="nav-tabContent">
+		  <div class="tab-pane fade show active" id="com-por-aprob" role="tabpanel" aria-labelledby="com-por-aprob-tab">
+		  	<div class="col-md-12 p-0">
+				<div class="card card-sombra">
+					<div class="card-header content-card-header">
+						<div class="title-card-header">
+						   <h5>Comentarios por aprobar</h5>
+						</div>
+						
+						 <small>Aquí sólo podrás aprobar los comentarios. <br>Recuerda que solo los comentarios aprobados son los que mostrarán en las iniciativas</small>
+						<button id="aprobar_comentarios" class="btn btn-purple float-right">Aprobar</button>
 					</div>
-					
-					 <small>Aquí sólo podrás aprobar los comentarios. <br>Recuerda que solo los comentarios aprobados son los que mostrarán en las iniciativas</small>
-					
-				</div>
-				<div class="card-body">
-					<!--tabla que es llenada con una función ajax-->
-					<table id="table_comentarios" class="table dataTable table-striped" style="width:100%; height: 20rem">
-					<thead>
-						<tr>
-							<th scope="col">Folio</th>
-							<th scope="col">Aprobar</th>
-							<th scope="col" class="">Comisión</th>
-							<th scope="col" class="">Iniciativa</th>
-							<th scope="col" class="">Usuario</th>
-							<th scope="col">Comentario</th>
-							<th scope="col">Fecha comentario</th>							
+					<div class="card-body">
+						<!--tabla que es llenada con una función ajax-->
+						<table id="table_comentarios" class="table dataTable table-striped" style="width:100%;">
+							<thead>
+								<tr>
+									<th scope="col">Folio</th>
+									<th scope="col">Aprobar</th>
+									<th scope="col" class="">Comisión</th>
+									<th scope="col" class="">Iniciativa</th>
+									<th scope="col" class="">Usuario</th>
+									<th scope="col">Comentario</th>
+									<th scope="col">Fecha comentario</th>							
 
-						</tr>
-					</thead>
-					<tbody class="list-modulo-terminologias">  
-					</tbody>
-				</table>
+								</tr>
+							</thead>
+							<tbody class="">  
+							</tbody>
+						</table>
 
+					</div>
 				</div>
 			</div>
+		  </div>
+		  <div class="tab-pane fade" id="com-aprobados" role="tabpanel" aria-labelledby="com-aprobados-tab">
+		  	<div class="col-md-12 p-0">
+				<div class="card card-sombra">
+					<div class="card-header content-card-header">
+						<div class="title-card-header">
+						   <h5>Comentarios aprobados</h5>
+						</div>
+						
+						 <small>Aquí sólo podrás ver los comentarios aprobados. <br>Recuerda que solo los comentarios aprobados son los que mostrarán en las iniciativas</small>
+						
+					</div>
+					<div class="card-body">
+						<!--tabla que es llenada con una función ajax-->
+						<table id="table_comentarios_aprobados" class="table dataTable table-striped" style="width:100%;">
+							<thead>
+								<tr>
+									<th scope="col">Folio</th>
+									<th scope="col">Aprobar</th>
+									<th scope="col" class="">Comisión</th>
+									<th scope="col" class="">Iniciativa</th>
+									<th scope="col" class="">Usuario</th>
+									<th scope="col">Comentario</th>
+									<th scope="col">Fecha comentario</th>							
+
+								</tr>
+							</thead>
+							<tbody class="">  
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		  </div>
+		 
 		</div>
+		
 	</div>
 	<?php
 	//Si el usuario es administrador podrá añadir, editar o eliminar terminologías
@@ -528,7 +586,7 @@
 					</div>
 					<div class="card-body">
 						<!--tabla que es llenada con una función ajax-->
-						<table id="table_terminologias" class="table dataTable table-striped" style="width:100%; height: 20rem">
+						<table id="table_terminologias" class="table dataTable table-striped" style="width:100%;">
 						<thead>
 							<tr>
 								<th scope="col" class="">Nombre</th>
@@ -538,7 +596,7 @@
 
 							</tr>
 						</thead>
-						<tbody class="list-modulo-terminologias">  
+						<tbody class="">  
 						</tbody>
 					</table>
 
@@ -564,7 +622,7 @@
 					</div>
 					<div class="card-body">
 						<!--tabla que es llenada con una función ajax-->
-						<table id="table_datos" class="table dataTable table-striped" style="width:100%; height: 20rem">
+						<table id="table_datos" class="table dataTable table-striped" style="width:100%;">
 						<thead>
 							<tr>
 								<th scope="col" class="">Título</th>
@@ -572,6 +630,8 @@
 								<th scope="col">Descripción</th>
 								<th scope="col">Imagen</th>
 								<th scope="col">Link</th>
+								<th scope="col">Licencia</th>
+								<th scope="col">Diccionario de datos</th>
 								<th scope="col" class="centrar">Acciones</th>
 								
 
@@ -1314,7 +1374,8 @@
 			"columns": 
 			[
 			
-			{ data: "nombre"},  
+			{ data: "nombre"}, 
+			{ data: "comision"},  
 			{ data: "id_principal" },
 			{ data: "infolej" },
 
@@ -1657,8 +1718,118 @@
 						checked = "checked";
 					}
 					return '<div class="form-check">'+
-						'<input '+disabled+' '+checked+' type="checkbox" class="form-check-input aprobar_comentario" ide="'+data["id"]+'" id="aprobar_comentario'+data["RowNumY"]+'">'+
+						'<input '+disabled+' '+checked+' type="checkbox" class="form-check-input aprobar_comentario" ide="'+data["id"]+'" id="aprobar_comentario'+data["RowNumY"]+'" value="'+data["id"]+'">'+
 						'<label class="form-check-label" for="aprobar_comentario'+data["RowNumY"]+'">Aprobar</label>'+
+					'</div>';
+					
+				},
+			}, 
+			
+			{ data: "comision" },  
+			{
+				"className": '',
+				"data": null,
+				render:function(data, type, row)
+				{
+					//Si la iniciativa tiene nombre, se mostrará
+					var iniciativa = "";
+					if(data["iniciativa"] != null && data["iniciativa"] != "" && data["iniciativa"].length > 0 ){
+						iniciativa = "<b>Iniciativa:</b> "+data["iniciativa"]+"<br>";
+					}
+					return iniciativa+"<b>Infolej:</b> "+data["infolej"]+"<br><b>Id principal:</b>"+data["id_principal"];
+					
+					
+					
+				},
+			},   
+			{
+				"className": '',
+				"data": null,
+				render:function(data, type, row)
+				{
+					//Aquí se muestra el nombre del usuario y el email de quien hizo el comentario
+					return "<b>Nombre:</b>"+data["usuario_nombre"]+"<br><b>Email:</b>"+data["usuario_email"];
+				},
+			}, 
+			{
+				"width:":50,
+				"className": '',
+				"data": null,
+				render:function(data, type, row)
+				{
+					//Aquí se muestra el comentario
+					return '<div class="expandable text-justify">'+
+					'<p>'+data["usuario_comentario"]+'</p>'+
+					'</div>';
+				},
+			},   
+			{ data: "fecha_creacion" },
+
+			], 
+
+				
+			"language": {
+				"url": SITEURL +'/DataTables/DataTableSpanish.json',
+			},
+			"autoWidth": false,
+			paging: true,
+			searching: true,
+			select: true,
+			"scrollX": true,
+			"processing" : true,
+
+			
+			
+		});
+		var oTable = $('#table_comentarios_aprobados').DataTable(); 
+		oTable.destroy();
+
+		var table_comentarios_aprobados = $('#table_comentarios_aprobados').dataTable({
+
+			"ajax": {
+				//Desde esta ruta se obtiene del backend la información de los comentarios
+				"url": SITEURL +"/configuraciones/get_comentarios_aprobados",
+				"dataSrc": "",
+				data:{
+					"_token": "{{ csrf_token() }}",
+				}
+			},
+			"columns": 
+			[
+			
+			{
+				"className": 'text-center',
+				"data": null,
+				render:function(data, type, row)
+				{
+					var iniciativa = "";
+					var file = "";
+					//Si el usuario subió un archivo, se muestra el archivo
+					if(data["usuario_url_file"] != null && data["usuario_url_file"]!= ""){
+						var url = "{{URL::to('')}}";
+						file =  '<a href="'+url+'/get_file_comentario/'+data["id"]+'" target="_blank"><button class="btn btn-purple ver_archivo" ide="'+data["id"]+'"><i class="far fa-file"></i></button></a>';
+					}else{ //de lo contrario no se muestra nada
+						file =  "";
+					}
+
+					return "COM"+data["folio_comentario"]+"<br>"+file;
+				},
+			},  
+			{
+				"className": '',
+				"data": null,
+				render:function(data, type, row)
+				{
+					var disabled = "";
+					var checked = "";
+					//Si el comentario está aprobado, mostrar el checked y deshabilitarlo
+					if(data["aprobado"] == 1){
+						disabled = "disabled";
+						checked = "checked";
+					}
+					return '<div class="form-check">'+
+						'<input '+disabled+' '+checked+' type="checkbox" class="form-check-input comentario_aprobado" ide="'+data["id"]+'" id="comentario_aprobado'+data["RowNumY"]+'">'+
+						'<label class="form-check-label" for="comentario_aprobado'+data["RowNumY"]+'">Aprobar</label>'+
 					'</div>';
 					
 				},
@@ -1722,7 +1893,7 @@
 		});
 
 		//Función que se ejecuta al aprobar el comentario
-		$('body').off('change',".aprobar_comentario");
+		/*$('body').off('change',".aprobar_comentario");
 		$('body').on('change', '.aprobar_comentario', function () {
 			var ide = $(this).attr("ide");
 			var checkbox = $(this);
@@ -1789,10 +1960,97 @@
 				}); 
 
 			}
+		});*/
+
+		$('body').off('click',"#aprobar_comentarios");
+		$('body').on('click', '#aprobar_comentarios', function () {
+			var comentarios_por_aprobar = [];
+
+			$(".aprobar_comentario:checked").each(function(){
+			    comentarios_por_aprobar.push(this.value);
+			});
+
+			if(comentarios_por_aprobar.length > 0) { //Si hay al menos un comentario elegido
+				bootbox.confirm({ //Manda un mensaje de confirmación de aprobación
+					message : "<p class='text-center'><i class='fa fa-exclamation-triangle icon-warning'></i>&nbsp¿Está seguro que desea aprobar los comentarios seleccionados?</p>",
+					buttons: {
+						confirm: {
+							label: 'CONTINUAR',
+							className: 'btn-principal-modal'
+						},
+						cancel: {
+							label: 'CANCELAR',
+							className: 'btn-outline-dark-modal'
+						}
+					},
+					callback: function (result) {
+						if(result == true){ //Si la confirmación fue exitosa
+							
+							//Muestra el preloader como indicativo de que algo está pasando
+							$("#preloader").css("display", "block");
+							$.ajax({
+								type: "post",
+								data:{_token: "{{ csrf_token() }}", comentarios: comentarios_por_aprobar},
+								//Desde esta ruta el backend aprueba los comentarios
+								url: SITEURL + "/configuraciones/aprobar_comentarios",
+								
+								success: function (data) {
+									if(data.status == "200"){ //Si la respuesta del backend fue exitosa
+										//Actualiza la tabla
+										var oTable = $('#table_comentarios').DataTable(); 
+										oTable.ajax.reload();
+										var oTable = $('#table_comentarios_aprobados').DataTable(); 
+										oTable.ajax.reload();
+										//Notifica que la acción fue ejecutada con éxito
+										bootbox.alert("¡Comentario(s) aprobado(s) con éxito!");
+									}
+									else if (data.status == "422"){ //Si hubieron mensajes de error del lado del backend
+										var error = data.msg;
+										var mensaje = "";
+										for (var i in error) {
+											var error_msg = error[i];
+											mensaje = mensaje + error_msg+"<br>";
+										}
+										bootbox.alert(mensaje);
+									}else{
+										bootbox.alert("¡Error al aprobar el comentario!");
+										$(checkbox).prop("checked", false);
+									}
+								},
+								error: function (data) {
+									console.log('Error:', data);
+									bootbox.alert("¡Error al aprobar el comentario!");
+									$(checkbox).prop("checked", false);
+								},
+								complete: function(){
+									//Independientemente de la respuesta obtenida se cierra el preloader
+									setTimeout(function() {
+										$("#preloader").fadeOut(500);
+									},200);
+								}
+							});
+						}else{
+							$(checkbox).prop("checked", false);
+						}
+					}
+				}); 
+
+			}else{
+				bootbox.alert("¡Debe seleccionar al menos un comentario!");
+			}
 		});
+
 
 		//Función que se ejecuta después de dibujar la tabla de los comentarios para poder ocultar parte de los comentarios que están extensos
 		$('#table_comentarios').DataTable().on("draw", function(){
+		   $('.expandable p').expander({
+			  slicePoint: 50, // si eliminamos por defecto es 100 caracteres
+			  expandText: '[Leer más]', // por defecto es 'read more...'
+			  collapseTimer: 0, // tiempo de para cerrar la expanción si desea poner 0 para no cerrar
+			  userCollapseText: '[Cerrar]' // por defecto es 'read less...'
+			});
+		});
+		$('#table_comentarios_aprobados').DataTable().on("draw", function(){
 		   $('.expandable p').expander({
 			  slicePoint: 50, // si eliminamos por defecto es 100 caracteres
 			  expandText: '[Leer más]', // por defecto es 'read more...'
@@ -2129,6 +2387,24 @@
 					return data["link"];
 				},
 			},
+			{
+				"className": 'details-control text-justify',
+				"orderable": false,
+				"data": null,
+				render:function(data, type, row)
+				{	
+					return data["link_licencia"];
+				},
+			},
+			{
+				"className": 'details-control text-justify',
+				"orderable": false,
+				"data": null,
+				render:function(data, type, row)
+				{	
+					return data["link_diccionario"];
+				},
+			},
 			
 			{
 				"className": 'details-control text-center',
@@ -2260,6 +2536,8 @@
 					}
 					$("#categoria_dato").val(data["categoria"]).trigger("change");
 					$("#link_dato").val(data["link"]);
+					$("#link_licencia").val(data["link_licencia"]);
+					$("#link_diccionario").val(data["link_diccionario"]);
 					//Se muestra el modal
 					$("#action_dato").modal();
 					

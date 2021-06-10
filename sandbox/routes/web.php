@@ -408,10 +408,14 @@ Route::post('configuraciones/update_iniciativa/{idp}/{idi}', 'ConfiguracionesCon
 
 
 /*Route para los comentarios*/
-//Obtiene los comentarios, si es ADMINISTRADOR, obtiene todos, si es un usuario de comisión solo los de su comisión, de lo contrario no ve nada(Esta función se encuentra en ConfiguracionesController)
+//Obtiene los comentarios pendientes de aprobar, si es ADMINISTRADOR, obtiene todos, si es un usuario de comisión solo los de su comisión, de lo contrario no ve nada(Esta función se encuentra en ConfiguracionesController)
 Route::get('/configuraciones/get_comentarios', 'ConfiguracionesController@get_comentarios');
+//Obtiene los comentarios aprobados, si es ADMINISTRADOR, obtiene todos, si es un usuario de comisión solo los de su comisión, de lo contrario no ve nada(Esta función se encuentra en ConfiguracionesController)
+Route::get('/configuraciones/get_comentarios_aprobados', 'ConfiguracionesController@get_comentarios_aprobados');
 //DISPONIBLE PARA EL ADMINISTRADOR/USUARIO DE COMISIÓN -> Función que aprueba un comentario (Esta función se encuentra en ConfiguracionesController)
 Route::post('configuraciones/aprobar_comentario', 'ConfiguracionesController@aprobar_comentario');
+//DISPONIBLE PARA EL ADMINISTRADOR/USUARIO DE COMISIÓN -> Función que aprueba uno o varios comentario (Esta función se encuentra en ConfiguracionesController)
+Route::post('configuraciones/aprobar_comentarios', 'ConfiguracionesController@aprobar_comentarios');
 
 //Función que obtiene el archivo que un usuario sube al comentar una iniciativa
 Route::get('get_file_comentario/{ide}', function ($ide) {
@@ -891,3 +895,9 @@ Route::post('send_comentario', function (Request $request) {
 
 //Sirve para cambiar la portada de los view (Esta función se encuentra en ConfiguracionesController)
 Route::post('configuraciones/change_portada', 'ConfiguracionesController@change_portada');
+
+
+//ESTADÍSTICAS
+Route::get('/configuraciones/estadisticas', 'ConfiguracionesController@estadisticas');
+//obtiene la información de los comentarios para ser graficado
+Route::get('/configuraciones/get_data_graficas/{id?}/{fi?}/{ff?}', 'ConfiguracionesController@get_data_graficas');

@@ -21,38 +21,38 @@
 					
 				</div>
 				<div class="col-md-10" style="background: white;padding: 2rem 3rem">
-					<div style="font-weight: bold;font-size: 1.2rem">Comentario en Iniciativa</div>
+					<div style="font-weight: bold;font-size: 1.2rem">Comentario en Iniciativa Aprobado</div>
 					<div style="font-size: 1.0rem">
 						<?php 
-							echo "<b>Hola, ".ucwords(mb_strtolower($data["usuario_nombre"], "utf-8"))."</b>";
+							echo "<b>Hola, ".ucwords(mb_strtolower($data->nombre, "utf-8"))."</b>";
 						?>
 
 						
-						<br><br>Tu comentario ha sido registrado muchas gracias por tus aportaciones</a>.<br>
+						<br><br>Tu comentario ha sido APROBADO, muchas gracias por tus aportaciones</a>.<br>
 
 						
 
 						<div style="text-align: left; margin-top: 1em">
-							<label style="text-align: left!important"><span style='color:#0277B9; font-weight:bold; font-size: 1.2em'>FOLIO: COM{{$folio}}</span></label>
+							<label style="text-align: left!important"><span style='color:#0277B9; font-weight:bold; font-size: 1.2em'>FOLIO: COM{{$comentario->id}}</span></label>
 							<br>
-							Tu comentario fue realizado en la iniciativa<br>
+							Tu comentario fue APROBADO en la iniciativa<br>  
 							
-								<?php if($iniciativa->nombre_iniciativa != null && $iniciativa->nombre_iniciativa != ""){
-									echo '<label style="text-align: left!important"><span style="color:#0277B9; font-weight:bold; font-size: 1.2em">'.$iniciativa->nombre_iniciativa.'</span></label>';
+								<?php if($comentario->nombre_iniciativa != null && $comentario->nombre_iniciativa != ""){
+									echo '<label style="text-align: left!important"><span style="color:#0277B9; font-weight:bold; font-size: 1.2em">'.$comentario->nombre_iniciativa.'</span></label>';
 								}else{
-									echo '<label style="text-align: left!important"><span style="color:#0277B9; font-weight:bold; font-size: 1.2em">Infolej: '.$iniciativa->Infolej.'<br>Id principal: '.$iniciativa->id_principal.'</span></label>';
+									echo '<label style="text-align: left!important"><span style="color:#0277B9; font-weight:bold; font-size: 1.2em">Infolej: '.$comentario->Infolej.'<br>Id principal: '.$comentario->id_principal.'</span></label>';
 								}
 								?>
 							
 							.<br><br>
-							<b>Este comentario aún necesita ser aprobado.</b>
+							
 							<span class="mb-4 mt-4 msg_bienv_login" style="font-weight: 500!important;color: darkslategray;margin-bottom: 1.5rem !important; margin-top: 1.5rem!important; text-align: left!important; display: block;">
 							
 								
 								<?php 
 									$fecha =date('d/m/Y H:i:s');
 									
-									echo '<span  style="font-weight: 500!important;"><b>Fecha y hora de solicitud: </b> '.$fecha.' hrs.</span>';
+									echo '<span  style="font-weight: 500!important;"><b>Fecha y hora de APROBACIÓN: </b> '.$fecha.' hrs.</span>';
 									
 								?>
 								<br><br>Te invitamos a seguir visitando nuestro sitio. Para conocer más sobre nuestro contenido da clic en el siguiente enlace:

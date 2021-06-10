@@ -12,12 +12,18 @@ use App\Models\Iniciativa;
 use App\Models\DatosAbiertos;
 use App\Models\IniciativaComentario;
 use App\Models\ConteoIniciativasComision;
+use App\Models\DetalleIniciativasComision;
+
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+
+use Illuminate\Support\Facades\Notification;
+//Estas notificaciones se usan para envío de correos
+use App\Notifications\ComentarioAprobado;
 
 class ConfiguracionesController extends Controller
 {
@@ -808,7 +814,7 @@ class ConfiguracionesController extends Controller
 		//Obtiene las iniciativas
 		DB::statement(DB::raw('set @rownum=0'));
 		$iniciativas = DB::table('detalle_iniciativas_comision')
-		->select(DB::raw('(@rownum:=@rownum+1) AS RowNumY'), 'detalle_iniciativas_comision.id_principal','detalle_iniciativas_comision.infolej','iniciativas.nombre','iniciativas.url_imagen','iniciativas.url_video','iniciativas.descripcion_video')
+		->select(DB::raw('(@rownum:=@rownum+1) AS RowNumY'), 'detalle_iniciativas_comision.id_principal','detalle_iniciativas_comision.infolej','iniciativas.nombre','iniciativas.url_imagen','iniciativas.url_video','iniciativas.descripcion_video','detalle_iniciativas_comision.nom_comision as comision')
 		->leftJoin('iniciativas', 'iniciativas.infolej', '=', 'detalle_iniciativas_comision.infolej');
 		if($usuario->rol != "Administrador"){ //Si el usuario es diferente al administrador, hará el filtro para que solo traiga las que son de su comisión
 			
@@ -834,7 +840,7 @@ class ConfiguracionesController extends Controller
 		return response()->json($iniciativa);  //Envía la información obtenida al frontend
 	}
 
-	//Obtiene los comentarios
+	//Obtiene los comentarios pendientes de aprobación
 	public function get_comentarios(){
 		//Obtiene la información del usuario logueado
 		$usuario = User::find(Auth::id());
@@ -842,7 +848,28 @@ class ConfiguracionesController extends Controller
 		DB::statement(DB::raw('set @rownum=0'));
 			$comentarios = IniciativaComentario::select(DB::raw('(@rownum:=@rownum+1) AS RowNumY'),"iniciativa_comentarios.*",DB::raw("DATE_FORMAT(iniciativa_comentarios.fecha_creacion, '%Y-%m-%d') as fecha_creacion"),"detalle_iniciativas_comision.nom_comision as comision",'iniciativas.nombre as iniciativa',"detalle_iniciativas_comision.id_comision","iniciativa_comentarios.id as folio_comentario")
 			->leftJoin('detalle_iniciativas_comision', 'detalle_iniciativas_comision.infolej', '=', 'iniciativa_comentarios.infolej')
-			->leftJoin('iniciativas', 'iniciativas.infolej', '=', 'iniciativa_comentarios.infolej');
+			->leftJoin('iniciativas', 'iniciativas.infolej', '=', 'iniciativa_comentarios.infolej')
+			->where("iniciativa_comentarios.aprobado", 0);
+			
+		if($usuario->rol != "Administrador"){ //Si el usuario es diferente al administrador, hará el filtro para que solo traiga las que son de su comisión
+			$comentarios = $comentarios->where("id_comision",$usuario->id_comision);
+		}
+		$comentarios = $comentarios->orderBy("iniciativa_comentarios.fecha_creacion", "asc")
+		->get();
+		
+		return response()->json($comentarios);   //Envía la información obtenida al frontend
+	}
+
+	//Obtiene los comentarios aprobados
+	public function get_comentarios_aprobados(){
+		//Obtiene la información del usuario logueado
+		$usuario = User::find(Auth::id());
+		//Obtiene los comentarios
+		DB::statement(DB::raw('set @rownum=0'));
+			$comentarios = IniciativaComentario::select(DB::raw('(@rownum:=@rownum+1) AS RowNumY'),"iniciativa_comentarios.*",DB::raw("DATE_FORMAT(iniciativa_comentarios.fecha_creacion, '%Y-%m-%d') as fecha_creacion"),"detalle_iniciativas_comision.nom_comision as comision",'iniciativas.nombre as iniciativa',"detalle_iniciativas_comision.id_comision","iniciativa_comentarios.id as folio_comentario")
+			->leftJoin('detalle_iniciativas_comision', 'detalle_iniciativas_comision.infolej', '=', 'iniciativa_comentarios.infolej')
+			->leftJoin('iniciativas', 'iniciativas.infolej', '=', 'iniciativa_comentarios.infolej')
+			->where("iniciativa_comentarios.aprobado", 1);
 			
 		if($usuario->rol != "Administrador"){ //Si el usuario es diferente al administrador, hará el filtro para que solo traiga las que son de su comisión
 			$comentarios = $comentarios->where("id_comision",$usuario->id_comision);
@@ -882,6 +909,53 @@ class ConfiguracionesController extends Controller
 		return response()->json($response,200); //Retorna este array al frontend
 	}
 
+	//Aprobar uno o varios comentario
+	public function aprobar_comentarios(Request $request){
+		
+		DB::beginTransaction();
+		try {
+			$comentarios = $request["comentarios"];
+			if($comentarios){
+				//Recorre los comentarios a aprobar
+				foreach ($comentarios as $key => $value) {
+					//Busca el comentario a aprobar, y actualiza la información de que se aprobó, quien lo aprobó y la fecha de aprobación
+					$iniciativa = IniciativaComentario::select("iniciativa_comentarios.*","iniciativas.nombre as nombre_iniciativa")
+					->leftJoin('iniciativas', 'iniciativas.infolej', '=', 'iniciativa_comentarios.infolej')
+					->where("iniciativa_comentarios.infolej",$value)
+					->first();
+					$comentario = IniciativaComentario::find($value);
+					$response["resp"] = IniciativaComentario::find($value)->update([
+						'aprobado' => 1,
+						'id_usuario_aprobacion' => Auth::id(),
+						'fecha_aprobacion' => date("Y-m-d"),
+						
+					]);
+					//Se le notifica al usuario que su comentario fue aprobado
+					$data =(Object) ["nombre"=>$comentario->usuario_nombre, "email"=>$comentario->usuario_email];
+					Notification::route('mail',$comentario->usuario_email)->notify(new ComentarioAprobado($data,$comentario));
+
+				}
+				$response["status"] = "200";
+			}else{
+				$response = array("status"=>"422", "msg" => "Debes seleccionar al menos un comentario");
+			}
+			
+			 
+			
+				
+			//Hasta que llegue aquí se ejecuta el commit en la base de datos
+			DB::commit();
+			
+		}
+		catch (\Illuminate\Database\QueryException $e) { //En caso de que ocurra un error, se define el array al frontend
+			//Si hay error se hace el rollback
+			DB::rollback();
+			$response = array("status"=>"422", "msg" => ["Ocurrió un error en la base de datos, intenta más tarde. "], "error"=>$e);
+		}
+		
+		return response()->json($response,200); //Retorna este array al frontend
+	}
+
 
 	/*************************************DATOS ABIERTOS**********************************/
 	//Función que crea un dato
@@ -894,12 +968,16 @@ class ConfiguracionesController extends Controller
 					"descripcion" => $request["descripcion"],
 					"link" => $request["link"],
 					"categoria" => $request["categoria"],
+					"link_licencia" => $request["link_licencia"],
+					"link_diccionario" => $request["link_diccionario"],
 
 				);
 				//Se definen los nombres que corresponden a las variables que se mandan por post
 				$niceNames = array(
 					'descripcion' => 'Descripción',
 					'titulo' => 'Título',
+					'link_licencia' => 'Licencia',
+					'link_diccionario' => 'Diccionario',
 					
 				);
 				//Validadores del formulario que se envía
@@ -975,6 +1053,8 @@ class ConfiguracionesController extends Controller
 						'descripcion' => $data['descripcion'],
 						'url_imagen'=> $url_imagen,
 						'link'=>$data["link"],
+						'link_licencia'=>$data["link_licencia"],
+						'link_diccionario'=>$data["link_diccionario"],
 						"categoria" => $request["categoria"],
 						
 					]);
@@ -1009,6 +1089,8 @@ class ConfiguracionesController extends Controller
 					"descripcion" => $request["descripcion"],
 					"link" => $request["link"],
 					"categoria" => $request["categoria"],
+					"link_licencia" => $request["link_licencia"],
+					"link_diccionario" => $request["link_diccionario"],
 				);
 				//Se busca los datos del dato que se quiere actualizar
 				$dato = DatosAbiertos::find($id);
@@ -1016,6 +1098,8 @@ class ConfiguracionesController extends Controller
 				$niceNames = array(
 					'descripcion' => 'Descripción',
 					'titulo' => 'Título',
+					'link_licencia' => 'Licencia',
+					'link_diccionario' => 'Diccionario',
 				);
 				//Validadores del formulario que se envía
 				$validator =  Validator::make(array_map('trim',$data), [
@@ -1095,6 +1179,8 @@ class ConfiguracionesController extends Controller
 						'titulo' => $data['titulo'],
 						'url_imagen'=>$url_imagen,
 						'link'=>$data['link'],
+						'link_licencia'=>$data["link_licencia"],
+						'link_diccionario'=>$data["link_diccionario"],
 						'descripcion' => $data['descripcion'],
 						"categoria" => $request["categoria"],
 						
@@ -1269,5 +1355,70 @@ class ConfiguracionesController extends Controller
 			abort(403, 'Acción no autorizada.'); //Lanza ventana 403 indicando que no se tiene permiso para acceder
 			return redirect('/');
 		}
+	}
+
+	//Función que manda al view de estadísticas
+	public function estadisticas(){
+		//Obtiene las comisiones*/
+		$comisiones = ConteoIniciativasComision::select("conteo_iniciativas_comision.id_comision","conteo_iniciativas_comision.nombre_comision","imagenes_comisiones.url_imagen")
+			->leftJoin('imagenes_comisiones', 'imagenes_comisiones.id_comision', '=', 'conteo_iniciativas_comision.id_comision')
+			->orderBy("nombre_comision")->get();
+
+		//Envía al view home.blade.php las variables videoyoutube, iniciativas, e imágenes_random
+	    return view('estadisticas', compact("comisiones"));
+	}
+	//Función que realiza la búsqueda de los comentarios por comisión por iniciativa
+	public function get_data_graficas($id_comision = "", $fecha_inicial = "", $fecha_final = ""){
+		
+		$infolej = [];
+		//Obtiene las comisiones
+		$comisiones = ConteoIniciativasComision::select("conteo_iniciativas_comision.id_comision")
+		->groupBy("conteo_iniciativas_comision.id_comision")
+		->get();
+		
+		if($comisiones){
+			foreach ($comisiones as $key => $value) {
+
+				//Busca las iniciativas asociadas a la comisión en turno
+				$iniciativas = DetalleIniciativasComision::select("detalle_iniciativas_comision.nom_comision as comision","detalle_iniciativas_comision.id_comision", "detalle_iniciativas_comision.infolej", "detalle_iniciativas_comision.id_principal")
+				->where("detalle_iniciativas_comision.id_comision", $value->id_comision);
+				
+				//Si se manda el filtro de alguna comisión, hace el filtro
+				if($id_comision > 0){
+					$iniciativas = $iniciativas->where("detalle_iniciativas_comision.id_comision", $id_comision);
+				}
+				$iniciativas = $iniciativas->get();
+
+				//Recorre cada iniciativa de la comisión en turno
+				foreach ($iniciativas as $key_i => $value_i) {
+					//Agrega el nombre de la comisión 
+					$comisiones[$key]["comision"] = $value_i->comision;
+					//Busca el número de comentarios totales de la iniciativa
+					$contador = IniciativaComentario::where([["id_principal",$value_i->id_principal],["infolej",$value_i->infolej]]);
+					//Si hay fecha inicial, hace el respectivo filtro
+					if($fecha_inicial != ""){
+						$contador = $contador->where(DB::raw("DATE_FORMAT(iniciativa_comentarios.fecha_creacion, '%Y-%m-%d')"), ">=", $fecha_inicial);
+					}
+					//Si hay fecha final, hace el respectivo filtro
+					if($fecha_final != ""){
+						$contador = $contador->where(DB::raw("DATE_FORMAT(iniciativa_comentarios.fecha_creacion, '%Y-%m-%d')"), "<=", $fecha_final);
+					}
+					$contador = $contador->get()->count();
+					if($contador > 0){
+						//Si encontró más de un comentario lo añade en el data que se manda a graficar
+						$comisiones[$key]["infolej ".$value_i->infolej.""] =  $contador ." com";
+						$infolej[] = "infolej ".$value_i->infolej;
+					}
+					
+				}
+			}
+		}
+		
+		//Lo que responde es la data de las comisiones con sus iniciativas y cuantos comentarios
+		$response["comentarios"] = $comisiones;
+		//Cuáles infolej (iniciativas) se encontraron con comentarios
+		$response["infolej"] = $infolej;
+		$response["status"] = "200";
+		return response()->json($response);  //Envía la información obtenida al frontend
 	}
 }

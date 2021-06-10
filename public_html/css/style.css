@@ -1498,3 +1498,16 @@ span.nombreusuario-color0{
         right: 20px;
     }
 } 
+
+
+.nav-tabs-comentarios .nav-link.active {
+    background-color: #94486d!important;
+    color: white!important;
+}
+.nav-tabs-comentarios .nav-link.active i {
+    color: var(--white)!important;
+}
+.nav-tabs-comentarios  .nav-link {
+    font-size: 18px;
+    color: var(--soft-black)!important;
+}
